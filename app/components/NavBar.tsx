@@ -28,18 +28,32 @@ export default function NavBar() {
         </Link>
 
         {/* Desktop menu (tampilkan di lg ke atas) */}
-        <div className="hidden lg:flex gap-4 items-center">
-          <button onClick={() => handleScroll("tech-stack")}>Tech Stack</button>
-          <button onClick={() => handleScroll("experience")}>Experience</button>
-          <button onClick={() => handleScroll("projects")}>Projects</button>
-          <Link href="/">Contact</Link>
+        <div className="hidden md:flex gap-5 items-center">
+          <button
+            onClick={() => handleScroll("tech-stack")}
+            className="cursor-pointer text-gray-500 hover:text-black"
+          >
+            Tech Stack
+          </button>
+          <button
+            onClick={() => handleScroll("experience")}
+            className="cursor-pointer text-gray-500 hover:text-black"
+          >
+            Experience
+          </button>
+          <button
+            onClick={() => handleScroll("projects")}
+            className="cursor-pointer text-gray-500 hover:text-black"
+          >
+            Projects
+          </button>
           <ButtonWhatsapp />
           <BtnDownloadCV />
         </div>
 
         {/* Hamburger (muncul di bawah lg) */}
         <button
-          className="lg:hidden"
+          className="md:hidden"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
         >

@@ -1,4 +1,4 @@
-import InstagramLogo from "@/public/assets/images/instagram.png";
+import LinkedInLogo from "@/public/assets/images/linkedin.png";
 import GithubLogo from "@/public/assets/images/github.png";
 import Image from "next/image";
 
@@ -17,7 +17,7 @@ export default function Footer() {
           className="cursor-pointer filter grayscale-100 hover:grayscale-0 transition duration-300"
         />
         <Image
-          src={InstagramLogo}
+          src={LinkedInLogo}
           alt="Instagram"
           width={20}
           height={20}

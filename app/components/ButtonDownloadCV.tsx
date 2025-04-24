@@ -12,7 +12,7 @@ export default function ButtonDownloadCV({
     "px-3 py-2 text-white font-medium rounded-lg shadow-md transition flex items-center gap-2 cursor-pointer";
   const styleMap = {
     default: "bg-black hover:bg-gray-800",
-    drawer: "bg-black hover:bg-gray-800 px-13 rounded-xl",
+    drawer: "bg-black hover:bg-gray-800 px-6 rounded-xl",
   };
 
   return (

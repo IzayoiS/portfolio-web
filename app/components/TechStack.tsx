@@ -23,14 +23,13 @@ const techs = [
 export default function TechStack() {
   return (
     <section id="tech-stack">
-      <h1 className="text-2xl font-extrabold mb-7">
+      <h1 className="text-3xl font-extrabold mb-7">
         Tech Stack - Tools I Use Everyday
       </h1>
 
       <Swiper
         modules={[Autoplay]}
         spaceBetween={10}
-        slidesPerView={5}
         loop={true}
         centeredSlides={true}
         speed={7000}
@@ -41,9 +40,11 @@ export default function TechStack() {
           reverseDirection: true,
         }}
         breakpoints={{
+          480: { slidesPerView: 3 },
           640: { slidesPerView: 3 },
           768: { slidesPerView: 4 },
           1024: { slidesPerView: 5 },
+          1920: { slidesPerView: 9 },
         }}
       >
         {techs.map((name, index) => (

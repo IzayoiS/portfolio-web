@@ -3,8 +3,8 @@ import Image from "next/image";
 
 export default function CardExperience() {
   return (
-    <div className="p-10 flex flex-row gap-4 justify-between">
-      <div className="flex gap-4 items-start">
+    <div className="p-1 flex flex-row gap-4 justify-between md:flex-row ">
+      <div className="flex gap-4 items-start ">
         <Image
           src={NocolaLogo}
           alt="Nocola"
@@ -25,12 +25,12 @@ export default function CardExperience() {
               JavaScript
             </li>
             <li className="text-md font-light">
-              Assisted in developing web applications using HTML, CSS, and
-              JavaScript
+              Worked on IoT projects involving hardware integration and PCB
+              assembly
             </li>
             <li className="text-md font-light">
-              Assisted in developing web applications using HTML, CSS, and
-              JavaScript
+              Identified and fixed software bugs, ensuring optimal performance
+              and security
             </li>
           </ul>
           <div className="flex gap-5 m-3 font-normal text-xs">

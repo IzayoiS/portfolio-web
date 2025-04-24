@@ -7,7 +7,7 @@ import ProfileImage from "@/public/assets/images/iqbal.jpg";
 
 export default function Intro() {
   return (
-    <section className="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start gap-10 py-30 px-6">
+    <section className="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start gap-10 pt-26 px-6">
       <div className="xl:m-auto xl:p-10">
         <div className="w-full max-w-[300px] aspect-square rounded-2xl overflow-hidden shadow-xl xl:mr-20">
           <Image
