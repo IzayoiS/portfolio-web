@@ -6,7 +6,7 @@ import TechStack from "./components/TechStack";
 
 export default function Home() {
   return (
-    <main className="p-10 space-y-15 ">
+    <main className="p-10 ">
       <Intro />
       <TechStack />
       <Experience />

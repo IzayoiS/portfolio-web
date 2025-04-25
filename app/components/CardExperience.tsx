@@ -1,58 +1,48 @@
-import NocolaLogo from "@/public/assets/images/nocola.png";
 import Image from "next/image";
+import { experiences } from "@/app/data/experiences";
 
 export default function CardExperience() {
   return (
-    <div className="p-1 flex flex-row gap-4 justify-between md:flex-row ">
-      <div className="flex gap-4 items-start ">
-        <Image
-          src={NocolaLogo}
-          alt="Nocola"
-          width={64}
-          height={64}
-          className="mt-5 mr-5"
-        />
-        <div>
-          <h1 className="text-lg font-semibold">
-            Internship Full Stack Web Developer
-          </h1>
-          <p className="text-md font-light text-green-500">
-            Nocola IOT Solution
-          </p>
-          <ul className="list-disc mt-4 ml-4">
-            <li className="text-md font-light">
-              Assisted in developing web applications using HTML, CSS, and
-              JavaScript
-            </li>
-            <li className="text-md font-light">
-              Worked on IoT projects involving hardware integration and PCB
-              assembly
-            </li>
-            <li className="text-md font-light">
-              Identified and fixed software bugs, ensuring optimal performance
-              and security
-            </li>
-          </ul>
-          <div className="flex gap-5 m-3 font-normal text-xs">
-            <p className="bg-gray-200 p-1 text-center w-20 h-auto rounded-2xl ">
-              JavaScript
-            </p>
-            <p className="bg-gray-200 p-1 text-center w-20 h-auto rounded-2xl ">
-              React.js
-            </p>
-            <p className="bg-gray-200 p-1 text-center w-20 h-auto rounded-2xl ">
-              PostgreSQL
-            </p>
-            <p className="bg-gray-200 p-1 text-center w-20 h-auto rounded-2xl ">
-              Tailwind
-            </p>
+    <div className="flex flex-col gap-6">
+      {experiences.map((exp, idx) => (
+        <div
+          key={idx}
+          className="mb-3 w-full dark:bg-gray-700 rounded-xl p-5 justify-between flex "
+        >
+          <div className="flex flex-col md:flex-row gap-4 items-start">
+            <Image
+              src={exp.logo}
+              alt={exp.company}
+              width={75}
+              className="object-contain h-16 mt-5 mr-5 dark:bg-white p-2 rounded-xl "
+            />
+            <div>
+              <h1 className="text-lg font-semibold">{exp.role}</h1>
+              <p className="text-md font-light text-green-500">{exp.company}</p>
+              <ul className="list-disc mt-4 ml-4">
+                {exp.description.map((desc, i) => (
+                  <li key={i} className="text-md font-light">
+                    {desc}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-2 mt-3 font-normal text-xs">
+                {exp.stack.map((tech, i) => (
+                  <p
+                    key={i}
+                    className="dark:bg-gray-500 bg-gray-200 p-1 text-center w-auto px-3 h-auto rounded-2xl"
+                  >
+                    {tech}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="text-sm font-extralight text-right whitespace-nowrap">
+            <p>{exp.period}</p>
           </div>
         </div>
-      </div>
-
-      <div className="flex justify-end text-sm font-extralight ">
-        May 2019 - Oct 2019
-      </div>
+      ))}
     </div>
   );
 }

@@ -12,7 +12,7 @@ export default function ButtonWhatsapp({
     "px-3 py-2 text-white font-medium rounded-lg shadow-md transition flex items-center gap-2 cursor-pointer";
   const styleMap = {
     default: "bg-green-500 hover:bg-green-600",
-    drawer: "bg-green-500 rounded-xl px-10",
+    drawer: "bg-green-500 rounded-xl w-full",
   };
 
   return (

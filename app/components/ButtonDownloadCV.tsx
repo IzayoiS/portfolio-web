@@ -9,10 +9,10 @@ export default function ButtonDownloadCV({
   variant = "default",
 }: ButtonDownloadCVProps) {
   const baseStyle =
-    "px-3 py-2 text-white font-medium rounded-lg shadow-md transition flex items-center gap-2 cursor-pointer";
+    "px-3 py-2 text-white dark:text-black font-medium rounded-lg shadow-md transition flex items-center gap-2 cursor-pointer";
   const styleMap = {
-    default: "bg-black hover:bg-gray-800",
-    drawer: "bg-black hover:bg-gray-800 px-6 rounded-xl",
+    default: "bg-black dark:bg-gray-100 hover:bg-gray-800",
+    drawer: "bg-black dark:bg-gray-300 hover:bg-gray-800 w-full rounded-xl",
   };
 
   return (
