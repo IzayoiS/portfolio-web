@@ -1,5 +1,5 @@
 import WhatsappLogo from "@/public/assets/images/whatsapp.png";
-import MailLogoBlack from "@/public/assets/images/mail.png";
+import MailLogoBlack from "@/public/assets/images/mail.svg";
 import MailLogo from "@/public/assets/images/mail-white.svg";
 import Image from "next/image";
 
@@ -21,7 +21,7 @@ export default function CallToAction() {
               alt="Mail"
               width={20}
               height={25}
-              className="block dark:hidden "
+              className="block dark:hidden"
             />
             <Image
               src={MailLogo}

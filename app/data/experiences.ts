@@ -18,12 +18,12 @@ export const experiences = [
     company: "Dumbways Bootcamp",
     logo: DumbwaysLogo,
     role: "Fullstack Student",
-    period: "Feb 2024 - Sekarang",
+    period: "Des 2024 - Present",
     description: [
-      "Mengerjakan challenge mingguan dengan Next.js dan Express.",
-      "Deploy aplikasi menggunakan Vercel dan Neon.tech.",
-      "Belajar pengujian dengan Vitest dan React Testing Library.",
+      "Completing weekly challenges using Next.js and Express.",
+      "Deploying applications with Vercel and Neon.tech.",
+      "Learning testing with Vitest and React Testing Library.",
     ],
-    stack: ["JavaScript", "React.js", "PostgreSQL", "Tailwind"],
+    stack: ["JavaScript", "React.js", "PostgreSQL", "Tailwind", "Express.js"],
   },
 ];

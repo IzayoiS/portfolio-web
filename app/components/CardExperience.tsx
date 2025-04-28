@@ -19,6 +19,10 @@ export default function CardExperience() {
             <div>
               <h1 className="text-lg font-semibold">{exp.role}</h1>
               <p className="text-md font-light text-green-500">{exp.company}</p>
+              <p className="text-sm font-extralight mt-1 md:hidden">
+                {exp.period}
+              </p>
+
               <ul className="list-disc mt-4 ml-4">
                 {exp.description.map((desc, i) => (
                   <li key={i} className="text-md font-light">
@@ -38,7 +42,7 @@ export default function CardExperience() {
               </div>
             </div>
           </div>
-          <div className="text-sm font-extralight text-right whitespace-nowrap">
+          <div className="hidden md:flex text-sm font-extralight text-right whitespace-nowrap">
             <p>{exp.period}</p>
           </div>
         </div>

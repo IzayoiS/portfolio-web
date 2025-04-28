@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import { Autoplay } from "swiper/modules";
 import StackIcon from "tech-stack-icons";
+import { useTheme } from "next-themes";
 
 const techs = [
   "tailwindcss",
@@ -21,6 +22,8 @@ const techs = [
 ];
 
 export default function TechStack() {
+  const { theme } = useTheme();
+
   return (
     <section id="tech-stack" className="pt-20">
       <h1 className="text-3xl font-extrabold mb-7">
@@ -28,16 +31,17 @@ export default function TechStack() {
       </h1>
 
       <Swiper
+        key={theme}
         modules={[Autoplay]}
         spaceBetween={10}
         loop={true}
         centeredSlides={true}
         speed={7000}
-        autoplay-disable-on-interaction="false"
         autoplay={{
           delay: 10,
           disableOnInteraction: false,
           reverseDirection: true,
+          pauseOnMouseEnter: false,
         }}
         breakpoints={{
           480: { slidesPerView: 3 },

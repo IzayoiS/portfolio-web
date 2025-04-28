@@ -5,8 +5,8 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <div className="flex flex-col items-center p-10 text-sm font-extralight border-t border-gray-200 dark:border-gray-600">
-      <p className="text-md font-light text-center mb-3">
+    <div className="flex flex-col items-center text-sm font-extralight border-t border-gray-200 dark:border-gray-600">
+      <p className="text-md font-light text-center mb-3 mt-3">
         © 2025 Designed and coded with ❤️ by Iqbal Muhammad Hasbi
       </p>
       <div className="flex w-20 justify-center gap-3">
