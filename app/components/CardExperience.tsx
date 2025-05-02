@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { experiences } from "@/app/data/experiences";
+import { experiences } from "@/utils/data/experiences";
 
 export default function CardExperience() {
   return (

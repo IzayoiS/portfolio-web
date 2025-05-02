@@ -1,4 +1,4 @@
-import { projects } from "@/app/data/projects";
+import { projects } from "@/utils/data/projects";
 import LinkLogo from "@/public/assets/images/link.svg";
 import LinkLogoBlack from "@/public/assets/images/link-black.svg";
 import GithubLogo from "@/public/assets/images/github.png";

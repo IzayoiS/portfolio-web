@@ -1,8 +1,9 @@
 "use client";
 
-import { projects } from "@/app/data/projects";
+import { projects } from "@/utils/data/projects";
 import { useState } from "react";
 import NewProject from "./components/addProject";
+import Image from "next/image";
 
 export default function ProjectCMSPage() {
   const [isAdding, setIsAdding] = useState(false);
@@ -11,10 +12,9 @@ export default function ProjectCMSPage() {
     return (
       <div className="p-6">
         <div className="flex flex-row gap-5 items-center mb-6">
-          <h1 className="text-2xl font-bold">Add New Project</h1>
           <button
             onClick={() => setIsAdding(false)}
-            className="text-md font-semibold bg-red-300 rounded-xl px-4 py-2 cursor-pointer"
+            className="ml-auto text-md font-semibold bg-slate-800 text-slate-200 rounded-xl px-4 py-2 cursor-pointer"
           >
             Cancel
           </button>
@@ -27,20 +27,23 @@ export default function ProjectCMSPage() {
   return (
     <div className="p-6">
       <div className="flex flex-row gap-5 items-center mb-6">
-        <h1 className="text-2xl font-bold">CMS - Projects</h1>
+        <h1 className="text-2xl font-bold">List Projects</h1>
         <button
           onClick={() => setIsAdding(true)}
-          className="text-md font-semibold bg-blue-300 rounded-xl px-4 py-2 cursor-pointer"
+          className="ml-auto text-md font-semibold bg-slate-800 text-slate-200 rounded-xl px-4 py-2 cursor-pointer"
         >
           ADD
         </button>
       </div>
       <div className="flex flex-col gap-6">
         {projects.map((project, index) => (
-          <div
-            key={index}
-            className="border border-gray-300 rounded-lg p-5 dark:bg-gray-800"
-          >
+          <div key={index} className="border border-gray-300 rounded-lg p-5 ">
+            <Image
+              src={project.logo}
+              alt={project.title}
+              width={75}
+              className="object-contain h-16 mr-5  p-2 rounded-xl "
+            />
             <h2 className="text-xl font-semibold mb-2">{project.title}</h2>
             <p className="text-sm mb-3">{project.description}</p>
 
@@ -48,7 +51,7 @@ export default function ProjectCMSPage() {
               {project.stack.map((tech, idx) => (
                 <span
                   key={idx}
-                  className="bg-gray-200 dark:bg-gray-600 text-xs px-3 py-1 rounded-full"
+                  className="bg-slate-800 text-slate-200 text-xs px-3 py-1 rounded-full"
                 >
                   {tech}
                 </span>
