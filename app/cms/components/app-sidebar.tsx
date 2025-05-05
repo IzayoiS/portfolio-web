@@ -49,7 +49,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="bg-slate-800 text-slate-400">
+      <SidebarHeader className="bg-black text-zinc-100">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -64,14 +64,14 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="bg-slate-800 text-slate-400">
+      <SidebarContent className="bg-black text-zinc-100">
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
           <SidebarMenu>
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
-                  className="hover:bg-blue-600 active:bg-blue-600"
+                  className="hover:bg-blue-600 hover:text-zinc-200 active:bg-blue-500"
                 >
                   <a
                     href={item.url}

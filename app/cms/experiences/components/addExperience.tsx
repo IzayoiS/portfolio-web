@@ -1,165 +1,290 @@
-import { useState } from "react";
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  formExpSchema,
+  FormExpSchemaDTO,
+} from "@/utils/schemas/experience.schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: currentYear - 1999 }, (_, i) => 2000 + i);
 
 export default function NewExperience() {
-  const [isCurrentlyWorking, setIsCurrentlyWorking] = useState(false);
-  const currentYear = new Date().getFullYear();
-  const [descriptions, setDescriptions] = useState<string[]>([""]);
+  const form = useForm<FormExpSchemaDTO>({
+    resolver: zodResolver(formExpSchema),
+    defaultValues: {
+      company: "",
+      role: "",
+      startMonth: "",
+      startYear: "",
+      endMonth: "",
+      endYear: "",
+      isCurrentlyWorking: false,
+      descriptions: [""],
+      logo: null,
+    },
+  });
 
-  const years = [];
-  for (let i = 2000; i <= currentYear; i++) {
-    years.push(i);
-  }
-
-  const handleCheckboxChange = () => {
-    setIsCurrentlyWorking(!isCurrentlyWorking);
-  };
+  const { watch, setValue } = form;
+  const isCurrentlyWorking = watch("isCurrentlyWorking");
+  const descriptions = watch("descriptions");
 
   const handleAddDescription = () => {
-    setDescriptions((prev) => [...prev, ""]);
+    setValue("descriptions", [...descriptions, ""]);
   };
 
   const handleRemoveDescription = (index: number) => {
-    setDescriptions((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleDescriptionChange = (index: number, value: string) => {
-    setDescriptions((prev) =>
-      prev.map((desc, i) => (i === index ? value : desc))
+    setValue(
+      "descriptions",
+      descriptions.filter((_, i) => i !== index)
     );
   };
 
+  const onSubmit = (data: FormExpSchemaDTO) => {
+    console.log(data);
+  };
+
   return (
-    <form className="bg-slate-800 text-slate-200 p-6 rounded shadow flex flex-col gap-4">
-      <label className="text-md">Company *</label>
-      <input type="text" className="border p-1 rounded" />
-
-      <label className="text-md">Role *</label>
-      <input type="text" className="border p-1 rounded" />
-
-      <div className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          id="currentlyWorking"
-          checked={isCurrentlyWorking}
-          onChange={handleCheckboxChange}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="company"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Company</FormLabel>
+              <FormControl className="border-neutral-400">
+                <Input {...field} autoComplete="off" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-        <label htmlFor="currentlyWorking" className="text-md">
-          I am currently working in this role
-        </label>
-      </div>
 
-      <label className="text-md">Period *</label>
-      <div className="flex flex-col gap-4 w-100">
-        <div className="flex flex-col gap-5">
-          <label className="text-md">Start Date *</label>
-          <div className="flex items-center gap-5">
-            <select className="border p-1 rounded w-full">
-              <option value="">Month</option>
-              <option value="January">January</option>
-              <option value="February">February</option>
-              <option value="March">March</option>
-              <option value="April">April</option>
-              <option value="May">May</option>
-              <option value="June">June</option>
-              <option value="July">July</option>
-              <option value="August">August</option>
-              <option value="September">September</option>
-              <option value="October">October</option>
-              <option value="November">November</option>
-              <option value="December">December</option>
-            </select>
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Role</FormLabel>
+              <FormControl className="border-neutral-400">
+                <Input {...field} autoComplete="off" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <select className="border p-1 rounded w-full">
-              <option value="">Year</option>
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <FormField
+          control={form.control}
+          name="isCurrentlyWorking"
+          render={({ field }) => (
+            <FormItem className="flex items-center space-x-2">
+              <FormControl>
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className="border-neutral-400"
+                />
+              </FormControl>
+              <FormLabel>Currently Working</FormLabel>
+            </FormItem>
+          )}
+        />
 
-        <div className="flex flex-col gap-5">
-          <label className="text-md">End Date *</label>
-          <div className="flex items-center gap-5">
-            <select
-              className="border p-1 rounded w-full disabled:bg-slate-600 disabled:text-slate-400"
-              disabled={isCurrentlyWorking}
-            >
-              <option value="">Month</option>
-              <option value="January">January</option>
-              <option value="February">February</option>
-              <option value="March">March</option>
-              <option value="April">April</option>
-              <option value="May">May</option>
-              <option value="June">June</option>
-              <option value="July">July</option>
-              <option value="August">August</option>
-              <option value="September">September</option>
-              <option value="October">October</option>
-              <option value="November">November</option>
-              <option value="December">December</option>
-            </select>
-
-            <select
-              className="border p-1 rounded w-full disabled:bg-slate-600 disabled:text-slate-400"
-              disabled={isCurrentlyWorking}
-            >
-              <option value="" className="dis">
-                Year
-              </option>
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-3">
-        <label className="text-md">Description</label>
-        <button
-          type="button"
-          onClick={handleAddDescription}
-          className="bg-green-500 text-white px-3 py-1 rounded w-fit cursor-pointer"
-        >
-          Add Description
-        </button>
-      </div>
-
-      {descriptions.map((desc, index) => (
-        <div key={index} className="flex items-center gap-2">
-          <textarea
-            className="border rounded resize-none w-full"
-            rows={2}
-            value={desc}
-            onChange={(e) => handleDescriptionChange(index, e.target.value)}
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="startMonth"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Start Month</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl className="border-neutral-400">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Month" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-black text-zinc-100 border-neutral-700">
+                    {months.map((month) => (
+                      <SelectItem key={month} value={month}>
+                        {month}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
           />
-          <button
-            type="button"
-            onClick={() => handleRemoveDescription(index)}
-            className="bg-red-500 text-white px-3 py-3 rounded cursor-pointer"
-          >
-            Delete
-          </button>
+
+          <FormField
+            control={form.control}
+            name="startYear"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Start Year</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <FormControl className="border-neutral-400">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Year" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="bg-black text-zinc-100 border-neutral-700">
+                    {years.map((year) => (
+                      <SelectItem key={year} value={year.toString()}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
         </div>
-      ))}
 
-      <label className="text-md">Logo</label>
-      <input
-        type="file"
-        className="bg-slate-800 h-10 w-100 p-2 cursor-pointer rounded-xs"
-      />
+        {!isCurrentlyWorking && (
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="endMonth"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Month</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl className="border-neutral-400">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Month" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-black text-zinc-100 border-neutral-700">
+                      {months.map((month) => (
+                        <SelectItem key={month} value={month}>
+                          {month}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="endYear"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Year</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl className="border-neutral-400">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Year" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-black text-zinc-100 border-neutral-700">
+                      {years.map((year) => (
+                        <SelectItem key={year} value={year.toString()}>
+                          {year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </div>
+        )}
 
-      <button
-        type="submit"
-        className="cursor-pointer bg-blue-500 text-white py-2 rounded mt-3"
-      >
-        Submit
-      </button>
-    </form>
+        <div className="space-y-2">
+          <FormLabel>Description</FormLabel>
+          {descriptions.map((desc, index) => (
+            <div key={index} className="flex gap-2 items-start">
+              <Textarea
+                value={desc}
+                className="border rounded resize-none w-full pl-1"
+                rows={2}
+                onChange={(e) => {
+                  const newDesc = [...descriptions];
+                  newDesc[index] = e.target.value;
+                  setValue("descriptions", newDesc);
+                }}
+              />
+              {index > 0 && (
+                <Button
+                  variant="destructive"
+                  type="button"
+                  onClick={() => handleRemoveDescription(index)}
+                  className="cursor-pointer"
+                >
+                  Delete
+                </Button>
+              )}
+            </div>
+          ))}
+          <Button
+            type="button"
+            onClick={handleAddDescription}
+            variant="secondary"
+            className="cursor-pointer"
+          >
+            Add Description
+          </Button>
+        </div>
+
+        <FormField
+          control={form.control}
+          name="logo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Logo</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  onChange={(e) => field.onChange(e.target.files?.[0])}
+                  className="border-neutral-400"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="w-full cursor-pointer">
+          Submit
+        </Button>
+      </form>
+    </Form>
   );
 }

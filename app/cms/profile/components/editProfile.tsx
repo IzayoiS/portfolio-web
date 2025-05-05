@@ -18,7 +18,7 @@ export default function EditProfile() {
   };
 
   return (
-    <form className="bg-slate-800 text-slate-200 p-5 rounded shadow flex flex-col gap-4">
+    <form className="bg-black text-zinc-100 p-5 rounded shadow flex flex-col gap-4">
       <div className="flex justify-center mb-4">
         <div className="relative w-36 h-36 rounded-full overflow-hidden">
           <Image

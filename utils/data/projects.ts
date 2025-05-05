@@ -3,21 +3,21 @@ import ProjectImage from "@/public/assets/images/project.png";
 
 export const projects = [
   {
-    title: "Personal Portfolio Website",
+    projectName: "Personal Portfolio Website",
     logo: CircleLogo,
-    description:
+    descriptions:
       "A personal website showcasing experiences, projects, and technologies used.",
-    stack: ["Next.js", "TypeScript", "Tailwind"],
-    link: "https://b59-circle-frontend-sable.vercel.app/",
-    github: "https://github.com/IzayoiS/b59-circle-frontend",
+    techStack: ["Next.js", "TypeScript", "Tailwind"],
+    linkGithub: "https://b59-circle-frontend-sable.vercel.app/",
+    linkWebsite: "https://github.com/IzayoiS/b59-circle-frontend",
   },
   {
-    title: "Todo App Fullstack",
+    projectName: "Todo App Fullstack",
     logo: ProjectImage,
-    description:
+    descriptions:
       "A task management application for tracking daily tasks, featuring user registration, login, and task management functionalities.",
-    stack: ["React", "Express", "PostgreSQL", "Prisma"],
-    link: "#",
-    github: "#",
+    techStack: ["React", "Express", "PostgreSQL", "Prisma"],
+    linkGithub: "#",
+    linkWebsite: "#",
   },
 ];

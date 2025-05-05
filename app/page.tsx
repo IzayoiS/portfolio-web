@@ -18,7 +18,7 @@ export default function Home() {
       <div className="w-[70%] mx-auto sticky top-0 z-50 bg-white">
         <NavBar />
       </div>
-      <main className="p-10 w-full max-w-7xl px-4 mx-auto">
+      <main className="p-10 w-full max-w-6xl px-4 mx-auto">
         <Intro />
         <TechStack />
         <Experience />
