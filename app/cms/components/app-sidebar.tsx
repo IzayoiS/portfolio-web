@@ -5,6 +5,7 @@ import { Briefcase, Code2, FolderKanban, Home, UserCircle } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
   SidebarMenu,
@@ -14,6 +15,14 @@ import {
 import LogoBLack from "@/public/assets/images/iqbal-logo-black.svg";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import NavUser from "./nav-user";
+import { useEffect, useState } from "react";
+
+type User = {
+  username: string;
+  email: string;
+  avatar: string;
+};
 
 // Menu items.
 const items = [
@@ -46,6 +55,17 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await fetch("/data/users.json");
+      const data = await res.json();
+      const firstUser = data[0];
+      setUser(firstUser);
+    };
+    fetchUsers();
+  }, []);
 
   return (
     <Sidebar>
@@ -54,7 +74,7 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:!p-1.5 hover:bg-black hover:text-zinc-100"
             >
               <a href="/cms">
                 <Image src={LogoBLack} alt="Iqbal" className="h-20 w-20" />
@@ -71,7 +91,7 @@ export function AppSidebar() {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
-                  className="hover:bg-blue-600 hover:text-zinc-200 active:bg-blue-500"
+                  className="hover:bg-blue-600 hover:text-zinc-50 active:bg-blue-500"
                 >
                   <a
                     href={item.url}
@@ -92,6 +112,9 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="p-0 m-o">
+        {user && <NavUser user={user} />}
+      </SidebarFooter>
     </Sidebar>
   );
 }

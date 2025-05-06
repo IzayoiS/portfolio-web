@@ -1,15 +1,15 @@
 "use client";
 
 import { AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import api from "@/utils/api";
 import { LoginSchema, LoginSchemaDTO } from "@/utils/schemas/auth.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import Users from "../../utils/data/users.json";
-import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,22 +23,28 @@ export default function LoginPage() {
     resolver: zodResolver(LoginSchema),
   });
 
-  function onSubmit(data: LoginSchemaDTO) {
-    const user = Users.find((user) => user.email === data.email);
+  async function onSubmit(data: LoginSchemaDTO) {
+    try {
+      const response = await api.post("/login", {
+        email: data.email,
+        password: data.password,
+      });
 
-    if (!user || user.password !== data.password) {
+      const { token } = response.data;
+
+      localStorage.setItem("token", token);
+
+      toast.success("Login success!");
+      router.push("/cms");
+    } catch (error) {
+      console.log(error);
       toast.error("Login failed: invalid email or password");
-
-      return;
     }
-
-    toast.success("Login success!");
-    router.push("/cms");
   }
 
   return (
-    <div className="h-screen flex items-center justify-center">
-      <div className="bg-white p-8 w-full max-w-md rounded shadow-md flex flex-col gap-5">
+    <div className="h-screen flex items-center justify-center bg-black">
+      <div className="bg-black text-zinc-100 p-8 w-full max-w-md shadow-md flex flex-col gap-5 border-slate-200 border rounded-lg">
         <h1 className="text-2xl font-bold text-center">Login to CMS</h1>
         <div className="flex flex-row gap-2 justify-center text-sm">
           <p>Don&apos;t have an account?</p>

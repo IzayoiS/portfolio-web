@@ -1,0 +1,14 @@
+[
+  {
+    "username": "iqbal",
+    "email": "iqbal@gmail.com",
+    "password": "1234",
+    "avatar": "/assets/images/iqbal.jpg"
+  },
+  {
+    "username": "admin",
+    "email": "admin@gmail.com",
+    "password": "1234",
+    "avatar": "/assets/images/iqbal-logo-white.svg"
+  }
+]
