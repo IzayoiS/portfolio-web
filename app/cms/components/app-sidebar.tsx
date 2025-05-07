@@ -17,6 +17,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import NavUser from "./nav-user";
 import { useEffect, useState } from "react";
+import api from "@/utils/api";
 
 type User = {
   username: string;
@@ -59,10 +60,27 @@ export function AppSidebar() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const res = await fetch("/data/users.json");
-      const data = await res.json();
-      const firstUser = data[0];
-      setUser(firstUser);
+      try {
+        const token = localStorage.getItem("token");
+        const userId = localStorage.getItem("userId");
+        if (!token || !userId) return;
+
+        const res = await api.get(`/profile/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = res.data;
+
+        setUser({
+          username: data.name || data.name,
+          email: data.User.Email || data.email,
+          avatar: data.image_url || "/default-avatar.png",
+        });
+      } catch (error) {
+        console.error("Failed to fetch user", error);
+      }
     };
     fetchUsers();
   }, []);

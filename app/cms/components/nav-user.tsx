@@ -15,6 +15,7 @@ import {
   SidebarMenuButton,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useRouter } from "next/navigation";
 
 export default function NavUser({
   user,
@@ -26,6 +27,12 @@ export default function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
+  const router = useRouter();
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    router.push("/login");
+  }
 
   return (
     <SidebarMenu className="bg-black pb-3">
@@ -54,7 +61,10 @@ export default function NavUser({
           align="end"
           sideOffset={4}
         >
-          <DropdownMenuItem className="cursor-pointer hover:bg-muted/25 focus:text-zinc-100 focus:bg-muted/25 hover:text-zinc-100 ">
+          <DropdownMenuItem
+            onClick={handleLogout}
+            className="cursor-pointer hover:bg-muted/25 focus:text-zinc-100 focus:bg-muted/25 hover:text-zinc-100 "
+          >
             <LogOutIcon />
             Log out
           </DropdownMenuItem>

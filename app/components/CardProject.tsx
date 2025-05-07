@@ -22,14 +22,14 @@ export default function CardProject() {
           </div>
           <div className="p-7 rounded-b-xl dark:bg-[#495057]">
             <h1 className="text-xl font-bold pb-2 dark:text-white">
-              {pr.title}
+              {pr.projectName}
             </h1>
             <p className="text-md font-light dark:text-white">
-              {pr.description}
+              {pr.descriptions}
             </p>
 
             <div className="flex flex-wrap gap-3 pt-5 pb-5 font-normal text-xs">
-              {pr.stack.map((tech, i) => (
+              {pr.techStack.map((tech, i) => (
                 <p
                   key={i}
                   className="dark:bg-gray-500 bg-gray-200 p-1 text-center w-auto px-3 h-auto rounded-2xl"
@@ -40,9 +40,9 @@ export default function CardProject() {
             </div>
 
             <div className="flex flex-wrap gap-5 items-center p-2">
-              {pr.github && pr.github !== "#" ? (
+              {pr.linkGithub && pr.linkGithub !== "#" ? (
                 <a
-                  href={pr.github}
+                  href={pr.linkGithub}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-row gap-2 text-center items-center text-blue-400 cursor-pointer"
@@ -59,9 +59,9 @@ export default function CardProject() {
                 </div>
               )}
 
-              {pr.link && pr.link !== "#" ? (
+              {pr.linkWebsite && pr.linkWebsite !== "#" ? (
                 <a
-                  href={pr.link}
+                  href={pr.linkWebsite}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex flex-row gap-2 text-center items-center text-blue-400 cursor-pointer"

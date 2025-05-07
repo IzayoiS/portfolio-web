@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import GuestRoute from "../components/GuestRoute";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -30,67 +31,73 @@ export default function LoginPage() {
         password: data.password,
       });
 
-      const { token } = response.data;
+      const { token, User } = response.data;
 
       localStorage.setItem("token", token);
+      localStorage.setItem("userId", User.ID);
 
-      toast.success("Login success!");
+      toast("Login success!");
       router.push("/cms");
     } catch (error) {
       console.log(error);
-      toast.error("Login failed: invalid email or password");
+      toast("Login failed: invalid email or password");
     }
   }
 
   return (
-    <div className="h-screen flex items-center justify-center bg-black">
-      <div className="bg-black text-zinc-100 p-8 w-full max-w-md shadow-md flex flex-col gap-5 border-slate-200 border rounded-lg">
-        <h1 className="text-2xl font-bold text-center">Login to CMS</h1>
-        <div className="flex flex-row gap-2 justify-center text-sm">
-          <p>Don&apos;t have an account?</p>
-          <Link href="/register" className="text-blue-500">
-            Sign Up
-          </Link>
-        </div>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-          <div>
-            <Input
-              type="text"
-              placeholder="Email address"
-              className="outline-none focus:outline-none shadow-none focus:shadow-none"
-              autoComplete="off"
-              {...register("email")}
-            />
-            {errors.email && (
-              <AlertDescription className="text-red-400 m-2">
-                {errors.email.message}
-              </AlertDescription>
-            )}
+    <GuestRoute>
+      <div className="h-screen flex items-center justify-center bg-black">
+        <div className="bg-black text-zinc-100 p-8 w-full max-w-md shadow-md flex flex-col gap-5 border-slate-200 border rounded-lg">
+          <h1 className="text-2xl font-bold text-center">Login to CMS</h1>
+          <div className="flex flex-row gap-2 justify-center text-sm">
+            <p>Don&apos;t have an account?</p>
+            <Link href="/register" className="text-blue-500">
+              Sign Up
+            </Link>
           </div>
 
-          <div>
-            <Input
-              type="password"
-              placeholder="Password"
-              className="border-2 outline-none p-3 rounded w-full"
-              {...register("password")}
-            />
-            {errors.password && (
-              <AlertDescription className="text-red-400 m-2">
-                {errors.password.message}
-              </AlertDescription>
-            )}
-          </div>
-
-          <Button
-            type="submit"
-            className="bg-blue-500 text-white py-3 rounded hover:bg-blue-600 cursor-pointer transition"
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-5"
           >
-            Login
-          </Button>
-        </form>
+            <div>
+              <Input
+                type="text"
+                placeholder="Email address"
+                className="outline-none focus:outline-none shadow-none focus:shadow-none"
+                autoComplete="off"
+                {...register("email")}
+              />
+              {errors.email && (
+                <AlertDescription className="text-red-400 m-2">
+                  {errors.email.message}
+                </AlertDescription>
+              )}
+            </div>
+
+            <div>
+              <Input
+                type="password"
+                placeholder="Password"
+                className="border-2 outline-none p-3 rounded w-full"
+                {...register("password")}
+              />
+              {errors.password && (
+                <AlertDescription className="text-red-400 m-2">
+                  {errors.password.message}
+                </AlertDescription>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              className="bg-blue-500 text-white py-3 rounded hover:bg-blue-600 cursor-pointer transition"
+            >
+              Login
+            </Button>
+          </form>
+        </div>
       </div>
-    </div>
+    </GuestRoute>
   );
 }
