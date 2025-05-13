@@ -13,17 +13,12 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import LogoBLack from "@/public/assets/images/iqbal-logo-black.svg";
+import { useAuth } from "@/store/user";
+import api from "@/utils/api";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 import NavUser from "./nav-user";
-import { useEffect, useState } from "react";
-import api from "@/utils/api";
-
-type User = {
-  username: string;
-  email: string;
-  avatar: string;
-};
 
 // Menu items.
 const items = [
@@ -56,7 +51,7 @@ const items = [
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useAuth();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -74,8 +69,9 @@ export function AppSidebar() {
         const data = res.data;
 
         setUser({
-          username: data.name || data.name,
-          email: data.User.Email || data.email,
+          id: userId,
+          username: data.name,
+          email: data.User.Email,
           avatar: data.image_url || "/default-avatar.png",
         });
       } catch (error) {
@@ -83,7 +79,7 @@ export function AppSidebar() {
       }
     };
     fetchUsers();
-  }, []);
+  }, [setUser]);
 
   return (
     <Sidebar>

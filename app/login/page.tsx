@@ -6,14 +6,16 @@ import { Input } from "@/components/ui/input";
 import api from "@/utils/api";
 import { LoginSchema, LoginSchemaDTO } from "@/utils/schemas/auth.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
+import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import GuestRoute from "../components/GuestRoute";
+import { useAuth } from "@/store/user";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
 
   const {
     register,
@@ -31,16 +33,28 @@ export default function LoginPage() {
         password: data.password,
       });
 
-      const { token, User } = response.data;
+      const { token, user } = response.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", User.ID);
+      login(
+        {
+          id: user.ID,
+          username: user.Name,
+          email: user.Email,
+          avatar: user.image_url || "/default-avatar.png",
+        },
+        token
+      );
 
       toast("Login success!");
       router.push("/cms");
     } catch (error) {
-      console.log(error);
-      toast("Login failed: invalid email or password");
+      if (isAxiosError(error)) {
+        const message = error.response?.data.error || "Login failed";
+        console.error("Axios login error", error);
+        return toast(message);
+      }
+
+      toast("Something went wrong");
     }
   }
 
@@ -49,12 +63,6 @@ export default function LoginPage() {
       <div className="h-screen flex items-center justify-center bg-black">
         <div className="bg-black text-zinc-100 p-8 w-full max-w-md shadow-md flex flex-col gap-5 border-slate-200 border rounded-lg">
           <h1 className="text-2xl font-bold text-center">Login to CMS</h1>
-          <div className="flex flex-row gap-2 justify-center text-sm">
-            <p>Don&apos;t have an account?</p>
-            <Link href="/register" className="text-blue-500">
-              Sign Up
-            </Link>
-          </div>
 
           <form
             onSubmit={handleSubmit(onSubmit)}

@@ -34,7 +34,8 @@
     "swiper": "^11.2.6",
     "tailwind-merge": "^3.2.0",
     "tech-stack-icons": "^2.1.0",
-    "zod": "^3.24.3"
+    "zod": "^3.24.3",
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
