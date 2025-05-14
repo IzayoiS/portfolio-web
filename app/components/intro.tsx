@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import ButtonDownloadCV from "./ButtonDownloadCV";
 import ButtonWhatsapp from "./ButtonWhatsapp";
@@ -5,8 +7,40 @@ import PinLocation from "@/public/assets/images/pin.png";
 import CircleLocation from "@/public/assets/images/button.png";
 import PinLocationWhite from "@/public/assets/images/arrows.png";
 import ProfileImage from "@/public/assets/images/iqbal.jpg";
+import { useEffect, useState } from "react";
+import api from "@/utils/api";
+import { toast } from "sonner";
+
+interface Profile {
+  id: number;
+  user_id: number;
+  name: string;
+  job_title: string;
+  bio: string;
+  location: string;
+  availability: string;
+  image_url: string;
+}
 
 export default function Intro() {
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await api.get("/profile/1");
+        const profile = res.data;
+        console.log("respon profile FE", profile);
+        setProfile(profile);
+      } catch (error) {
+        console.error("Failed to fetch profile", error);
+        toast("Failed to fetch profile!");
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   return (
     <section className="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start gap-10 pt-26 px-6">
       <div className="xl:m-auto xl:p-10">
@@ -21,7 +55,9 @@ export default function Intro() {
         </div>
       </div>
       <div className="max-w-2xl text-center lg:text-left">
-        <h1 className="text-6xl font-extrabold mb-3">Hi, I&apos;m Iqbal 👋</h1>
+        <h1 className="text-6xl font-extrabold mb-3">
+          Hi, I&apos;m {profile?.name} 👋
+        </h1>
         <h2 className="text-2xl text-gray-700 mb-4 dark:text-gray-400">
           A passionate Web Developer
         </h2>

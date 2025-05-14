@@ -6,13 +6,13 @@ import Image from "next/image";
 
 export default function CardProject() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-15">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {projects.map((pr, idx) => (
         <div
           key={idx}
-          className="w-full bg-white rounded-2xl mt-8 min-h-[400px] shadow-xs"
+          className=" bg-white rounded-2xl mt-8 min-h-[400px] shadow-xs flex flex-col"
         >
-          <div className="flex justify-center bg-gray-100 dark:bg-[#dee2e6] rounded-t-2xl h-60 items-center">
+          <div className="flex justify-center bg-gray-100 dark:bg-[#dee2e6] rounded-t-2xl h-55 items-center">
             <Image
               src={pr.logo}
               alt="Project"
@@ -20,11 +20,11 @@ export default function CardProject() {
               className="object-contain"
             />
           </div>
-          <div className="p-7 rounded-b-xl dark:bg-[#495057]">
+          <div className="p-7 rounded-b-xl dark:bg-gray-700">
             <h1 className="text-xl font-bold pb-2 dark:text-white">
               {pr.projectName}
             </h1>
-            <p className="text-md font-light dark:text-white">
+            <p className="text-md font-light dark:text-white ">
               {pr.descriptions}
             </p>
 
@@ -94,7 +94,9 @@ export default function CardProject() {
                     width={15}
                     className="hidden dark:block"
                   />
-                  <p className="text-sm font-light">Demo Unavailable</p>
+                  <p className="text-sm font-normal text-gray-400">
+                    Demo Unavailable
+                  </p>
                 </div>
               )}
             </div>

@@ -1,100 +1,187 @@
 import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { useUpdateProject } from "@/hooks/use-project";
+import {
+  formProjectSchema,
+  FormProjectSchemaDTO,
+} from "@/utils/schemas/project.schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { TailSpin } from "react-loader-spinner";
+import { ProjectType } from "@/hooks/use-project";
+import { toast } from "sonner";
 
-export interface Project {
-  projectName: string;
-  descriptions: string;
-  techStack: string[];
-  linkGithub: string;
-  linkWebsite: string;
-  logo: File | null;
+interface EditProjectProps {
+  project: ProjectType;
+  onClose: () => void;
 }
 
-export default function EditProject({ data }: { data: Project | null }) {
-  const [projectName, setProjectName] = useState("");
-  const [descriptions, setDescriptions] = useState("");
-  const [techStack, setTechStack] = useState<string[]>([""]);
-  const [linkGithub, setLinkGithub] = useState("");
-  const [linkWebsite, setLinkWebsite] = useState("");
-  const [logo, setLogo] = useState<File | null>(null);
+export default function EditProject({ project, onClose }: EditProjectProps) {
+  const form = useForm<FormProjectSchemaDTO>({
+    resolver: zodResolver(formProjectSchema),
+    defaultValues: {
+      projectName: project.project_name,
+      descriptions: project.descriptions,
+      techStack: project.tech_stack,
+      linkGithub: project.link_github || "",
+      linkWebsite: project.link_website || "",
+      logo: null,
+    },
+  });
 
-  useEffect(() => {
-    if (data) {
-      setProjectName(data.projectName || "");
-      setDescriptions(data.descriptions || "");
-      setTechStack(data.techStack || [""]);
-      setLinkGithub(data.linkGithub || "");
-      setLinkWebsite(data.linkWebsite || "");
-      setLogo(data.logo || null);
+  const { mutate, isPending } = useUpdateProject();
+
+  const onSubmit = (data: FormProjectSchemaDTO) => {
+    const formData = new FormData();
+
+    formData.append("project_name", data.projectName);
+    formData.append("descriptions", data.descriptions);
+    formData.append("tech_stack", data.techStack);
+    formData.append("link_github", data.linkGithub || "");
+    formData.append("link_website", data.linkWebsite || "");
+
+    const userId = localStorage.getItem("userId");
+    if (userId) formData.append("user_id", userId);
+
+    if (data.logo instanceof File) {
+      formData.append("logo", data.logo);
+    } else if (project.logo) {
+      formData.append("logo_url", project.logo);
     }
-  }, [data]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const updatedProject: Project = {
-      projectName,
-      descriptions,
-      techStack,
-      linkGithub,
-      linkWebsite,
-      logo,
-    };
-
-    console.log("Updated project data:", updatedProject);
-    // Submit ke backend...
+    mutate(
+      { id: project.id, formData },
+      {
+        onSuccess: () => {
+          onClose();
+          toast("Project updated successfully");
+        },
+        onError: (error) => {
+          console.error("Error updating project:", error);
+          toast("Failed to update project");
+        },
+      }
+    );
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-black text-slate-200 p-6 rounded shadow flex flex-col gap-4"
-    >
-      <label>Project Name *</label>
-      <Input
-        value={projectName}
-        onChange={(e) => setProjectName(e.target.value)}
-      />
-
-      <label>Descriptions *</label>
-      <div className="flex items-center gap-2">
-        <Textarea
-          value={descriptions}
-          className="resize-none w-full"
-          rows={2}
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="bg-black text-slate-200 space-y-6"
+      >
+        <FormField
+          control={form.control}
+          name="projectName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Project Name *</FormLabel>
+              <FormControl>
+                <Input {...field} className="border-neutral-400" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </div>
 
-      <label>Tech Stack</label>
-      <Input
-        value={techStack}
-        onChange={(e) =>
-          setTechStack(e.target.value.split(",").map((s) => s.trim()))
-        }
-      />
+        <FormField
+          control={form.control}
+          name="descriptions"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  className="resize-none w-full border-neutral-400"
+                  rows={3}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <label>Link Github</label>
-      <Input
-        value={linkGithub}
-        onChange={(e) => setLinkGithub(e.target.value)}
-      />
+        <FormField
+          control={form.control}
+          name="techStack"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tech Stack (comma separated)</FormLabel>
+              <FormControl>
+                <Input {...field} className="border-neutral-400" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <label>Website URL</label>
-      <Input
-        value={linkWebsite}
-        onChange={(e) => setLinkWebsite(e.target.value)}
-      />
+        <FormField
+          control={form.control}
+          name="linkGithub"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Link Github</FormLabel>
+              <FormControl>
+                <Input {...field} className="border-neutral-400" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <label>Logo</label>
-      <Input
-        type="file"
-        onChange={(e) => setLogo(e.target.files?.[0] || null)}
-      />
+        <FormField
+          control={form.control}
+          name="linkWebsite"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Website URL</FormLabel>
+              <FormControl>
+                <Input {...field} className="border-neutral-400" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <Button type="submit" className="mt-4 w-full">
-        Update Project
-      </Button>
-    </form>
+        <FormField
+          control={form.control}
+          name="logo"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Logo</FormLabel>
+              <FormControl>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => field.onChange(e.target.files?.[0])}
+                  className="border-neutral-400"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="flex gap-2">
+          <Button
+            type="submit"
+            className="flex-1 cursor-pointer"
+            disabled={isPending}
+          >
+            {isPending ? <TailSpin height={20} width={20} /> : "Update"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

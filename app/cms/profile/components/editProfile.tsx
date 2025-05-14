@@ -2,88 +2,71 @@
 
 import Image from "next/image";
 import ProfileImage from "@/public/assets/images/iqbal.jpg";
-import React, { useEffect, useState } from "react";
-import api from "@/utils/api";
+import { useProfile } from "@/hooks/use-profile";
 import { toast } from "sonner";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/utils/api";
+import { useAuth } from "@/store/user";
+import { TailSpin } from "react-loader-spinner";
+import { ChangeEvent, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 export default function EditProfile() {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const { data: profile, isLoading } = useProfile();
+  const { user, token } = useAuth();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
-  const [bio, setBio] = useState("");
-  const [location, setLocation] = useState("");
-  const [availability, setAvailability] = useState("available");
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const token = localStorage.getItem("token");
-      const userId = localStorage.getItem("userId");
-      if (!token || !userId) return;
-
-      try {
-        const res = await api.get(`/profile/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const profile = res.data;
-        console.log("profile", profile);
-
-        setName(profile.name);
-        setJobTitle(profile.job_title);
-        setBio(profile.bio);
-        setLocation(profile.location);
-        setAvailability(profile.availability);
-        setImagePreview(profile.image_url || null);
-      } catch (err) {
-        console.error("Failed to fetch profile", err);
-        toast("Failed to fetch profile!");
-      }
-    };
-
-    fetchProfile();
-  }, []);
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedImage(file);
-      const objectUrl = URL.createObjectURL(file);
-      setImagePreview(objectUrl);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
-    if (!token || !userId) return;
-
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("job_title", jobTitle);
-    formData.append("bio", bio);
-    formData.append("location", location);
-    formData.append("availability", availability);
-    if (selectedImage) formData.append("image", selectedImage);
-
-    try {
-      const res = await api.patch(`/profile/${userId}`, formData, {
+  const updateProfileMutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const res = await api.patch(`/profile/${user?.id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log("Profile updated", res.data);
+      return res.data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      setImagePreview(data.image_url);
       toast("Profile updated successfully!");
-      setImagePreview(res.data.imageURL);
-    } catch (err) {
-      console.error("Failed to update profile", err);
+    },
+    onError: (error) => {
+      console.error("Failed to update profile", error);
       toast("Update failed!");
+    },
+  });
+
+  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+    if (user?.id) {
+      formData.append("userId", user.id);
+    }
+
+    updateProfileMutation.mutate(formData);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[calc(100vh-200px)]">
+        <TailSpin visible={true} height={50} width={50} color="#fff" />
+      </div>
+    );
+  }
 
   return (
     <form
@@ -93,7 +76,7 @@ export default function EditProfile() {
       <div className="flex justify-center mb-4">
         <div className="relative w-36 h-36 rounded-full overflow-hidden">
           <Image
-            src={imagePreview || ProfileImage}
+            src={imagePreview || profile?.image_url || ProfileImage}
             alt="Profile"
             width={140}
             height={140}
@@ -112,72 +95,79 @@ export default function EditProfile() {
         type="file"
         id="profile-image"
         onChange={handleImageChange}
+        name="image"
         accept="image/*"
         className="hidden"
       />
 
-      <label className="text-md ">Name</label>
-      <input
-        type="text"
-        className="border p-1 rounded"
-        onChange={(e) => setName(e.target.value)}
-        value={name}
-      />
+      <div className="space-y-4">
+        <div>
+          <label className="text-md">Name</label>
+          <input
+            type="text"
+            name="name"
+            autoComplete="off"
+            className="w-full border p-2 rounded"
+            defaultValue={profile?.name || ""}
+          />
+        </div>
 
-      <label className="text-md ">Job Title</label>
-      <input
-        type="text"
-        className="border p-1 rounded"
-        onChange={(e) => setJobTitle(e.target.value)}
-        value={jobTitle}
-      />
+        <div>
+          <label className="text-md">Job Title</label>
+          <input
+            type="text"
+            name="job_title"
+            className="w-full border p-2 rounded"
+            defaultValue={profile?.job_title || ""}
+          />
+        </div>
 
-      <label className="text-md ">Bio</label>
-      <textarea
-        className="border p-1 rounded  resize-none"
-        rows={2}
-        onChange={(e) => setBio(e.target.value)}
-        value={bio}
-      ></textarea>
+        <div>
+          <label className="text-md">Bio</label>
+          <textarea
+            name="bio"
+            className="w-full border p-2 rounded resize-none"
+            rows={3}
+            defaultValue={profile?.bio || ""}
+          ></textarea>
+        </div>
 
-      <label className="text-md ">Location</label>
-      <input
-        type="text"
-        className="border p-1 rounded"
-        onChange={(e) => setLocation(e.target.value)}
-        value={location}
-      />
+        <div>
+          <label className="text-md">Location</label>
+          <input
+            type="text"
+            name="location"
+            className="w-full border p-2 rounded"
+            defaultValue={profile?.location || ""}
+          />
+        </div>
 
-      <label className="text-md ">Available for Work</label>
-      <select
-        name=""
-        id=""
-        className="border p-1 rounded w-full mb-2 "
-        onChange={(e) => setAvailability(e.target.value)}
-        value={availability}
-      >
-        <option
-          value="available"
-          className="bg-slate-800
-"
-        >
-          Available
-        </option>
-        <option
-          value="not-available"
-          className="bg-slate-800
-"
-        >
-          Not Available
-        </option>
-      </select>
+        <div>
+          <label className="text-md">Available for Work</label>
+          <select
+            name="availability"
+            className="w-full border p-2 rounded"
+            defaultValue={profile?.availability || "available"}
+          >
+            <option value="available">Available</option>
+            <option value="not-available">Not Available</option>
+          </select>
+        </div>
+      </div>
 
-      <button
+      <Button
         type="submit"
-        className="cursor-pointer bg-blue-500 text-white py-2 rounded"
+        disabled={updateProfileMutation.isPending}
+        className="cursor-pointer text-white py-2 rounded transition-colors "
       >
-        Save
-      </button>
+        {updateProfileMutation.isPending ? (
+          <div className="flex justify-center items-center">
+            <TailSpin visible={true} height={25} width={25} color="#fff" />
+          </div>
+        ) : (
+          "Save"
+        )}
+      </Button>
     </form>
   );
 }
