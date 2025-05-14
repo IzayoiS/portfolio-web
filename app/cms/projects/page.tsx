@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,10 +23,20 @@ import Image from "next/image";
 import { TailSpin } from "react-loader-spinner";
 import AddProject from "./components/addProject";
 import EditProject from "./components/editProject";
+import { useState } from "react";
 
 export default function ProjectCMSPage() {
   const { data: projects, isLoading } = useProject();
   const { mutate: deleteProject } = useDeleteProject();
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<ProjectType | null>(
+    null
+  );
+
+  const handleDialogClose = () => {
+    setIsEditDialogOpen(false);
+    setEditingProject(null);
+  };
 
   if (isLoading) {
     return (
@@ -59,24 +80,61 @@ export default function ProjectCMSPage() {
                 />
               )}
               <div className="flex gap-2">
-                <Dialog>
+                <Dialog
+                  open={isEditDialogOpen}
+                  onOpenChange={setIsEditDialogOpen}
+                >
                   <DialogTrigger asChild>
-                    <Button className="cursor-pointer bg-slate-800 text-zinc-100">
+                    <Button
+                      className="cursor-pointer bg-slate-800 text-zinc-100"
+                      onClick={() => {
+                        setEditingProject(project);
+                        setIsEditDialogOpen(true);
+                      }}
+                    >
                       Edit
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="bg-black text-zinc-100 max-w-md">
                     <DialogHeader>Edit Project</DialogHeader>
-                    <EditProject project={project} onClose={() => {}} />
+                    {editingProject && (
+                      <EditProject
+                        project={editingProject}
+                        onClose={handleDialogClose}
+                      />
+                    )}
                   </DialogContent>
                 </Dialog>
-                <Button
-                  variant="destructive"
-                  onClick={() => deleteProject(project.id)}
-                  className="cursor-pointer"
-                >
-                  Delete
-                </Button>
+
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" className="cursor-pointer">
+                      Delete
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="bg-black text-zinc-100 border-none">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription className="text-zinc-100">
+                        This action cannot be undone. This will permanently
+                        delete the project.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="cursor-pointer text-black">
+                        Cancel
+                      </AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => deleteProject(project.id)}
+                        className="bg-destructive cursor-pointer hover:bg-destructive/90"
+                      >
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
             </div>
 

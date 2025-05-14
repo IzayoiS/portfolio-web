@@ -62,8 +62,8 @@ export default function EditProject({ project, onClose }: EditProjectProps) {
       { id: project.id, formData },
       {
         onSuccess: () => {
-          onClose();
           toast("Project updated successfully");
+          onClose();
         },
         onError: (error) => {
           console.error("Error updating project:", error);
@@ -86,7 +86,11 @@ export default function EditProject({ project, onClose }: EditProjectProps) {
             <FormItem>
               <FormLabel>Project Name *</FormLabel>
               <FormControl>
-                <Input {...field} className="border-neutral-400" />
+                <Input
+                  {...field}
+                  className="border-neutral-400"
+                  autoComplete="off"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
