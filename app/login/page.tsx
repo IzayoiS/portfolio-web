@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import GuestRoute from "../components/GuestRoute";
 import { useAuth } from "@/store/user";
+import Cookies from "js-cookie";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -34,6 +35,9 @@ export default function LoginPage() {
       });
 
       const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+      Cookies.set("token", token, { path: "/", sameSite: "Lax" });
 
       login(
         {

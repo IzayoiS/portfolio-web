@@ -16,6 +16,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function NavUser({
   user,
@@ -31,6 +32,7 @@ export default function NavUser({
 
   function handleLogout() {
     localStorage.removeItem("token");
+    Cookies.remove("token");
     router.push("/login");
   }
 

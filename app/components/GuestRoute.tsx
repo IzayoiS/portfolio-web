@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { TailSpin } from "react-loader-spinner";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function GuestRoute({
   children,
@@ -9,23 +8,13 @@ export default function GuestRoute({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const pathname = usePathname();
-  const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      router.replace(pathname.startsWith("/login") ? "/cms" : pathname);
+      router.replace("/cms");
     }
-    setAuthChecked(true);
-  }, [router, pathname]);
-
-  if (!authChecked)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <TailSpin height={50} width={50} color="#fff" />
-      </div>
-    );
+  }, [router]);
 
   return <>{children}</>;
 }
