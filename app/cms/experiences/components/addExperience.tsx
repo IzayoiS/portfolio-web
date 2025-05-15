@@ -19,12 +19,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useAddExperience } from "@/hooks/use-experience";
 import {
   formExpSchema,
   FormExpSchemaDTO,
 } from "@/utils/schemas/experience.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { TailSpin } from "react-loader-spinner";
 
 const months = [
   "January",
@@ -40,11 +43,14 @@ const months = [
   "November",
   "December",
 ];
+interface ExperienceClose {
+  onClose: () => void;
+}
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: currentYear - 1999 }, (_, i) => 2000 + i);
 
-export default function NewExperience() {
+export default function NewExperience({ onClose }: ExperienceClose) {
   const form = useForm<FormExpSchemaDTO>({
     resolver: zodResolver(formExpSchema),
     defaultValues: {
@@ -60,23 +66,33 @@ export default function NewExperience() {
     },
   });
 
-  const { watch, setValue } = form;
+  const { watch } = form;
   const isCurrentlyWorking = watch("isCurrentlyWorking");
-  const descriptions = watch("descriptions");
 
-  const handleAddDescription = () => {
-    setValue("descriptions", [...descriptions, ""]);
-  };
-
-  const handleRemoveDescription = (index: number) => {
-    setValue(
-      "descriptions",
-      descriptions.filter((_, i) => i !== index)
-    );
-  };
+  const { mutate, isPending } = useAddExperience();
 
   const onSubmit = (data: FormExpSchemaDTO) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append("company", data.company);
+    formData.append("role", data.role);
+    formData.append("startMonth", data.startMonth);
+    formData.append("startYear", data.startYear);
+    if (data.endMonth) formData.append("endMonth", data.endMonth);
+    if (data.endYear) formData.append("endYear", data.endYear);
+    formData.append("isCurrentlyWorking", String(data.isCurrentlyWorking));
+    data.descriptions.forEach((desc, i) => {
+      formData.append(`descriptions[${i}]`, desc);
+    });
+    if (data.logo) {
+      formData.append("logo", data.logo);
+    }
+
+    mutate(formData, {
+      onSuccess: () => {
+        form.reset();
+        onClose();
+      },
+    });
   };
 
   return (
@@ -88,8 +104,12 @@ export default function NewExperience() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Company</FormLabel>
-              <FormControl className="border-neutral-400">
-                <Input {...field} autoComplete="off" />
+              <FormControl>
+                <Input
+                  {...field}
+                  autoComplete="off"
+                  className="border-neutral-400"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -102,8 +122,12 @@ export default function NewExperience() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Role</FormLabel>
-              <FormControl className="border-neutral-400">
-                <Input {...field} autoComplete="off" />
+              <FormControl>
+                <Input
+                  {...field}
+                  autoComplete="off"
+                  className="border-neutral-400"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -123,6 +147,7 @@ export default function NewExperience() {
                 />
               </FormControl>
               <FormLabel>Currently Working</FormLabel>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -135,19 +160,24 @@ export default function NewExperience() {
               <FormItem>
                 <FormLabel>Start Month</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl className="border-neutral-400">
-                    <SelectTrigger>
+                  <FormControl>
+                    <SelectTrigger className="border-neutral-400">
                       <SelectValue placeholder="Month" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="bg-black text-zinc-100 border-neutral-700">
+                  <SelectContent className="bg-black text-zinc-100">
                     {months.map((month) => (
-                      <SelectItem key={month} value={month}>
+                      <SelectItem
+                        key={month}
+                        value={month}
+                        className="hover:bg-neutral-700 cursor-pointer"
+                      >
                         {month}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -159,19 +189,24 @@ export default function NewExperience() {
               <FormItem>
                 <FormLabel>Start Year</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl className="border-neutral-400">
-                    <SelectTrigger>
+                  <FormControl>
+                    <SelectTrigger className="border-neutral-400">
                       <SelectValue placeholder="Year" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent className="bg-black text-zinc-100 border-neutral-700">
+                  <SelectContent className="bg-black text-zinc-100">
                     {years.map((year) => (
-                      <SelectItem key={year} value={year.toString()}>
+                      <SelectItem
+                        key={year}
+                        value={year.toString()}
+                        className="hover:bg-neutral-700 cursor-pointer"
+                      >
                         {year}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -186,22 +221,28 @@ export default function NewExperience() {
                 <FormItem>
                   <FormLabel>End Month</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl className="border-neutral-400">
-                      <SelectTrigger>
+                    <FormControl>
+                      <SelectTrigger className="border-neutral-400">
                         <SelectValue placeholder="Month" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-black text-zinc-100 border-neutral-700">
+                    <SelectContent className="bg-black text-zinc-100">
                       {months.map((month) => (
-                        <SelectItem key={month} value={month}>
+                        <SelectItem
+                          key={month}
+                          value={month}
+                          className="hover:bg-neutral-700 cursor-pointer"
+                        >
                           {month}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="endYear"
@@ -209,60 +250,76 @@ export default function NewExperience() {
                 <FormItem>
                   <FormLabel>End Year</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl className="border-neutral-400">
-                      <SelectTrigger>
+                    <FormControl>
+                      <SelectTrigger className="border-neutral-400">
                         <SelectValue placeholder="Year" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-black text-zinc-100 border-neutral-700">
+                    <SelectContent className="bg-black text-zinc-100">
                       {years.map((year) => (
-                        <SelectItem key={year} value={year.toString()}>
+                        <SelectItem
+                          key={year}
+                          value={year.toString()}
+                          className="hover:bg-neutral-700 cursor-pointer"
+                        >
                           {year}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
         )}
 
-        <div className="space-y-2">
-          <FormLabel>Description</FormLabel>
-          {descriptions.map((desc, index) => (
-            <div key={index} className="flex gap-2 items-start">
-              <Textarea
-                value={desc}
-                className="border rounded resize-none w-full pl-1"
-                rows={2}
-                onChange={(e) => {
-                  const newDesc = [...descriptions];
-                  newDesc[index] = e.target.value;
-                  setValue("descriptions", newDesc);
-                }}
-              />
-              {index > 0 && (
+        <FormField
+          control={form.control}
+          name="descriptions"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center gap-3">
+                <FormLabel>Description</FormLabel>
                 <Button
-                  variant="destructive"
                   type="button"
-                  onClick={() => handleRemoveDescription(index)}
-                  className="cursor-pointer"
+                  onClick={() => field.onChange([...(field.value || []), ""])}
+                  className=" text-white px-3 py-1 rounded cursor-pointer"
                 >
-                  Delete
+                  <Plus />
                 </Button>
-              )}
-            </div>
-          ))}
-          <Button
-            type="button"
-            onClick={handleAddDescription}
-            variant="secondary"
-            className="cursor-pointer"
-          >
-            Add Description
-          </Button>
-        </div>
+              </div>
+
+              {(field.value || []).map((desc: string, index: number) => (
+                <div key={index} className="flex items-center gap-2 mt-2">
+                  <Textarea
+                    className="border rounded resize-none w-full pl-1"
+                    rows={2}
+                    value={desc}
+                    onChange={(e) => {
+                      const updated = [...(field.value || [])];
+                      updated[index] = e.target.value;
+                      field.onChange(updated);
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    onClick={() => {
+                      const updated = [...(field.value || [])];
+                      updated.splice(index, 1);
+                      field.onChange(updated);
+                    }}
+                    className="cursor-pointer"
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              ))}
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}
@@ -273,16 +330,22 @@ export default function NewExperience() {
               <FormControl>
                 <Input
                   type="file"
-                  onChange={(e) => field.onChange(e.target.files?.[0])}
+                  accept="image/*"
+                  onChange={(e) => field.onChange(e.target.files?.[0] || null)}
                   className="border-neutral-400"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full cursor-pointer">
-          Submit
+        <Button
+          type="submit"
+          className="w-full cursor-pointer"
+          disabled={isPending}
+        >
+          {isPending ? <TailSpin height={20} width={20} /> : "Submit"}
         </Button>
       </form>
     </Form>

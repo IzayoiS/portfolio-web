@@ -18,7 +18,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { TailSpin } from "react-loader-spinner";
 
-export default function NewProject() {
+interface ProjectClose {
+  onClose: () => void;
+}
+
+export default function NewProject({ onClose }: ProjectClose) {
   const form = useForm<FormProjectSchemaDTO>({
     resolver: zodResolver(formProjectSchema),
     defaultValues: {
@@ -45,6 +49,7 @@ export default function NewProject() {
     mutate(formData, {
       onSuccess: () => {
         form.reset();
+        onClose();
       },
     });
   };

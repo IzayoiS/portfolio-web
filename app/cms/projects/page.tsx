@@ -11,19 +11,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import LogoWeb from "@/public/assets/images/iqbal-logo-white.svg";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ProjectType, useDeleteProject, useProject } from "@/hooks/use-project";
 import Image from "next/image";
+import { useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import AddProject from "./components/addProject";
 import EditProject from "./components/editProject";
-import { useState } from "react";
 
 export default function ProjectCMSPage() {
   const { data: projects, isLoading } = useProject();
@@ -32,10 +34,12 @@ export default function ProjectCMSPage() {
   const [editingProject, setEditingProject] = useState<ProjectType | null>(
     null
   );
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   const handleDialogClose = () => {
     setIsEditDialogOpen(false);
     setEditingProject(null);
+    setIsAddDialogOpen(false);
   };
 
   if (isLoading) {
@@ -50,15 +54,15 @@ export default function ProjectCMSPage() {
     <div className="p-4">
       <div className="flex flex-row gap-5 items-center mb-6">
         <h1 className="text-2xl font-bold">List Projects</h1>
-        <Dialog>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button className="ml-auto bg-slate-800 text-slate-200 rounded-xl px-4 py-2 cursor-pointer">
               Add Project
             </Button>
           </DialogTrigger>
           <DialogContent className="bg-black text-zinc-100 max-w-md cursor-pointer">
-            <DialogHeader>Add New Project</DialogHeader>
-            <AddProject />
+            <DialogTitle>Add New Project</DialogTitle>
+            <AddProject onClose={handleDialogClose} />
           </DialogContent>
         </Dialog>
       </div>
@@ -70,16 +74,14 @@ export default function ProjectCMSPage() {
             className="border border-gray-700 rounded-lg p-4 "
           >
             <div className="flex justify-between items-center mb-4">
-              {project.logo && (
-                <Image
-                  src={project.logo}
-                  alt={project.project_name}
-                  width={75}
-                  height={75}
-                  className="object-contain h-16 w-16 rounded-xl"
-                />
-              )}
-              <div className="flex gap-2">
+              <Image
+                src={project.logo || LogoWeb}
+                alt={project.project_name}
+                width={75}
+                height={75}
+                className="object-contain h-16 w-16 rounded-xl"
+              />
+              <div className="flex gap-2 ml-auto">
                 <Dialog
                   open={isEditDialogOpen}
                   onOpenChange={setIsEditDialogOpen}
