@@ -3,6 +3,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { SiteHeader } from "./components/site-header";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "./components/query-provider";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export default function CMSLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,7 +11,9 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
       <AppSidebar />
       <main className="w-screen bg-black text-zinc-100">
         <SiteHeader />
-        <QueryProvider>{children}</QueryProvider>
+        <ProtectedRoute>
+          <QueryProvider>{children}</QueryProvider>
+        </ProtectedRoute>
         <Toaster />
       </main>
     </SidebarProvider>

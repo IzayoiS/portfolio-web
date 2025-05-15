@@ -1,40 +1,36 @@
 "use client";
 import { useAuth } from "@/store/user";
-import api from "@/utils/api";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { TailSpin } from "react-loader-spinner";
 
 export default function ProtectedRoute({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [authChecked, setAuthChecked] = useState<boolean | null>(null);
   const setUser = useAuth((state) => state.setUser);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        return router.replace("/login");
-      }
-
+    const verifyAuth = async () => {
       try {
-        const res = await api.get("/check");
-        setUser(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Auth error:", error);
-        localStorage.removeItem("token");
-        router.replace("/login");
+        const res = await fetch("/api/check");
+        if (res.ok) {
+          setUser(await res.json());
+        }
+      } finally {
+        setAuthChecked(false);
       }
     };
+    verifyAuth();
+  }, [setUser]);
 
-    checkAuth();
-  }, [router, setUser]);
-
-  if (loading) return <div>Loading...</div>;
+  if (!authChecked)
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <TailSpin height={50} width={50} color="#fff" />
+      </div>
+    );
 
   return <>{children}</>;
 }

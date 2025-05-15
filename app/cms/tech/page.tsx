@@ -35,6 +35,9 @@ export default function TechPage() {
     <div className="p-4">
       <div className="flex flex-row gap-5 items-center mb-6">
         <h1 className="text-2xl font-bold">List Tech Stack</h1>
+        <i className="text-zinc-400">
+          Right click for delete,left click for edit!
+        </i>
         <Dialog>
           <DialogTrigger asChild>
             <Button className="ml-auto text-md font-semibold bg-slate-800 text-zinc-200 rounded-xl px-4 py-2 cursor-pointer">
@@ -62,7 +65,7 @@ export default function TechPage() {
               </ContextMenuContent>
               <Dialog>
                 <DialogTrigger asChild>
-                  <div className="flex flex-col items-center justify-center gap-2 p-2 w-50 border border-slate-700 rounded-xl bg-slate-900 hover:scale-101 cursor-pointer transition-transform">
+                  <div className="flex flex-col items-center justify-center gap-2 p-2 w-50 border border-slate-700 rounded-xl bg-slate-900 hover:scale-101 cursor-pointer transition-transform h-full">
                     <Image
                       src={tech.icon}
                       alt={tech.name}
