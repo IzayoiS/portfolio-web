@@ -6,7 +6,7 @@ export const projects = [
     projectName: "Personal Portfolio Website",
     logo: CircleLogo,
     descriptions:
-      "A personal website showcasing experiences, projects, and technologies used.",
+      "A personal website showcasing experiences, personal website showcasing experiences, personal website showcasing experiences, projects, and technologies used.",
     techStack: ["Next.js", "TypeScript", "Tailwind"],
     linkGithub: "https://b59-circle-frontend-sable.vercel.app/",
     linkWebsite: "https://github.com/IzayoiS/b59-circle-frontend",

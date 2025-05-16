@@ -5,6 +5,12 @@ import GithubLogo from "@/public/assets/images/github.png";
 import Image from "next/image";
 
 export default function CardProject() {
+  function truncateText(text: string, wordLimit: number) {
+    const words = text.split(" ");
+    if (words.length <= wordLimit) return text;
+    return words.slice(0, wordLimit).join(" ") + " ...";
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {projects.map((pr, idx) => (
@@ -25,7 +31,8 @@ export default function CardProject() {
               {pr.projectName}
             </h1>
             <p className="text-md font-light dark:text-white ">
-              {pr.descriptions}
+              {truncateText(pr.descriptions, 12)}
+              {/* {pr.descriptions} */}
             </p>
 
             <div className="flex flex-wrap gap-3 pt-5 pb-5 font-normal text-xs">
