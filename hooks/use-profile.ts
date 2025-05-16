@@ -2,11 +2,11 @@ import api from "@/utils/api";
 import { useQuery } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useProfile = () => {
+export const useProfile = (id: number) => {
   return useQuery({
-    queryKey: ["profile"],
+    queryKey: ["profile", id],
     queryFn: async () => {
-      const res = await api.get("/profile/1");
+      const res = await api.get(`/profile/${id}`);
       return res.data;
     },
   });

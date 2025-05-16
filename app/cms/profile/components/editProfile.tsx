@@ -12,7 +12,7 @@ import { ChangeEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 export default function EditProfile() {
-  const { data: profile, isLoading } = useProfile();
+  const { data: profile, isLoading } = useProfile(1);
   const { user, token } = useAuth();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const queryClient = useQueryClient();

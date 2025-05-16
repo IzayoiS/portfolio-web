@@ -11,7 +11,7 @@ import ButtonDownloadCV from "./ButtonDownloadCV";
 import ButtonWhatsapp from "./ButtonWhatsapp";
 
 export default function Intro() {
-  const { data: profile, isLoading } = useProfile();
+  const { data: profile, isLoading } = useProfile(1);
 
   if (isLoading) {
     return (
