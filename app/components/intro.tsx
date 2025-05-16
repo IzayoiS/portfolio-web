@@ -1,52 +1,32 @@
 "use client";
 
+import { useProfile } from "@/hooks/use-profile";
+import PinLocationWhite from "@/public/assets/images/arrows.png";
+import CircleLocation from "@/public/assets/images/button.png";
+import ProfileImage from "@/public/assets/images/iqbal.jpg";
+import PinLocation from "@/public/assets/images/pin.png";
 import Image from "next/image";
+import { TailSpin } from "react-loader-spinner";
 import ButtonDownloadCV from "./ButtonDownloadCV";
 import ButtonWhatsapp from "./ButtonWhatsapp";
-import PinLocation from "@/public/assets/images/pin.png";
-import CircleLocation from "@/public/assets/images/button.png";
-import PinLocationWhite from "@/public/assets/images/arrows.png";
-import ProfileImage from "@/public/assets/images/iqbal.jpg";
-import { useEffect, useState } from "react";
-import api from "@/utils/api";
-import { toast } from "sonner";
-
-interface Profile {
-  id: number;
-  user_id: number;
-  name: string;
-  job_title: string;
-  bio: string;
-  location: string;
-  availability: string;
-  image_url: string;
-}
 
 export default function Intro() {
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const { data: profile, isLoading } = useProfile();
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const res = await api.get("/profile/1");
-        const profile = res.data;
-        console.log("respon profile FE", profile);
-        setProfile(profile);
-      } catch (error) {
-        console.error("Failed to fetch profile", error);
-        toast("Failed to fetch profile!");
-      }
-    };
-
-    fetchProfile();
-  }, []);
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[calc(100vh-200px)]">
+        <TailSpin visible={true} height={50} width={50} color="#fff" />
+      </div>
+    );
+  }
 
   return (
     <section className="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start gap-10 pt-26 px-6">
       <div className="xl:m-auto xl:p-10">
         <div className="w-full max-w-[350px] aspect-square rounded-2xl overflow-hidden shadow-xl xl:mr-20">
           <Image
-            src={ProfileImage}
+            src={profile?.image_url || ProfileImage}
             alt="Iqbal Muhammad Hasbi"
             width={350}
             height={350}
@@ -59,13 +39,10 @@ export default function Intro() {
           Hi, I&apos;m {profile?.name} 👋
         </h1>
         <h2 className="text-2xl text-gray-700 mb-4 dark:text-gray-400">
-          A passionate Web Developer
+          {profile?.job_title}
         </h2>
         <p className="text-gray-600 mb-4 text-xl dark:text-gray-400">
-          I build and ship digital products from scratch to production.
-          Passionate about creating end-to-end solutions and turning ideas into
-          fully functional applications. With expertise in both frontend and
-          backend development
+          {profile?.bio}
         </p>
         <div className="flex items-center justify-center lg:justify-start gap-2 text-gray-700 mb-2">
           <Image
@@ -82,7 +59,7 @@ export default function Intro() {
             height={18}
             className="hidden dark:block"
           />
-          <span className="dark:text-gray-400">Depok, Sawangan, Indonesia</span>
+          <span className="dark:text-gray-400">{profile?.location}</span>
         </div>
         <div className="flex items-center justify-center lg:justify-start gap-2 text-gray-700 mb-2">
           <Image
@@ -93,7 +70,9 @@ export default function Intro() {
             className="m-1"
           />
           <span className="ml-0 dark:text-gray-400">
-            Available for new projects
+            {profile?.availability === "available"
+              ? "Available for new projects"
+              : "Currently employed, but open to new opportunities"}
           </span>
         </div>
         <div className="flex flex-wrap gap-4 justify-center lg:justify-start mt-4">
