@@ -1,6 +1,6 @@
-import WhatsappLogo from "@/public/assets/images/whatsapp.png";
-import MailLogoBlack from "@/public/assets/images/mail.svg";
 import MailLogo from "@/public/assets/images/mail-white.svg";
+import MailLogoBlack from "@/public/assets/images/mail.svg";
+import WhatsappLogo from "@/public/assets/images/whatsapp.png";
 import Image from "next/image";
 
 export default function CallToAction() {
@@ -13,8 +13,8 @@ export default function CallToAction() {
         Feel free to reach out if you&apos;re looking for a developer, have a
         question, or just want to connect.
       </p>
-      <div className="flex flex-row gap-8 justify-center">
-        <div className="border-r-1">
+      <div className="flex flex-col gap-8 justify-center sm:flex sm:flex-row items-center">
+        <div className="md:border-r-1">
           <a href="mailto:iqbalmhasbi@gmail.com" className="flex gap-3">
             <Image
               src={MailLogoBlack}
@@ -30,7 +30,7 @@ export default function CallToAction() {
               height={25}
               className="hidden dark:block dark:w-6"
             />
-            <p className="text-sm mr-6 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
+            <p className="text-sm md:mr-6 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
               iqbalmhasby54@gmail.com
             </p>
           </a>
