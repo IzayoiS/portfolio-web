@@ -3,6 +3,12 @@ import api from "@/utils/api";
 import { useQuery } from "@tanstack/react-query";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+export interface techType {
+  id: number;
+  name: string;
+  icon: string;
+}
+
 export const useTechStacks = () => {
   return useQuery({
     queryKey: ["tech-stacks"],
