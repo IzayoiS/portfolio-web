@@ -9,7 +9,7 @@ export interface ExpType {
   start_year: string;
   end_month: string;
   end_year: string;
-  currenly_working: boolean;
+  currently_working: boolean;
   descriptions: string[];
   logo: string;
 }

@@ -146,7 +146,7 @@ export default function EditProfile() {
           <label className="text-md">Available for Work</label>
           <select
             name="availability"
-            className="w-full border p-2 rounded"
+            className="w-full border p-2 rounded bg-black"
             defaultValue={profile?.availability || "available"}
           >
             <option value="available">Available</option>

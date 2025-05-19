@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -8,7 +9,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ExpType, useUpdateExperience } from "@/hooks/use-experience";
 import {
   formExpSchema,
@@ -19,6 +26,24 @@ import { Plus, Trash2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { TailSpin } from "react-loader-spinner";
 import { toast } from "sonner";
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: currentYear - 1999 }, (_, i) => 2000 + i);
 
 interface EditExperienceProps {
   experience: ExpType;
@@ -36,14 +61,16 @@ export default function EditExperience({
       role: experience.role,
       startMonth: experience.start_month,
       startYear: experience.start_year,
-      endMonth: experience.currenly_working ? "" : experience.end_month,
-      endYear: experience.currenly_working ? "" : experience.end_year,
-      isCurrentlyWorking: experience.currenly_working,
+      endMonth: experience.currently_working ? "" : experience.end_month,
+      endYear: experience.currently_working ? "" : experience.end_year,
+      isCurrentlyWorking: experience.currently_working,
       descriptions: experience.descriptions || [""],
       logo: undefined,
     },
   });
 
+  const { watch } = form;
+  const isCurrentlyWorking = watch("isCurrentlyWorking");
   const { mutate, isPending } = useUpdateExperience();
 
   const onSubmit = (data: FormExpSchemaDTO) => {
@@ -61,11 +88,9 @@ export default function EditExperience({
       "end_year",
       data.isCurrentlyWorking ? "" : data.endYear || ""
     );
-    formData.append("currently_working", String(data.isCurrentlyWorking));
+    formData.append("isCurrentlyWorking", String(data.isCurrentlyWorking));
 
-    data.descriptions.forEach((desc, index) => {
-      formData.append(`descriptions[${index}]`, desc);
-    });
+    formData.append("descriptions", JSON.stringify(data.descriptions));
 
     if (data.logo) {
       formData.append("logo", data.logo);
@@ -149,121 +174,106 @@ export default function EditExperience({
           render={({ field }) => (
             <FormItem className="flex items-center gap-2 space-y-0">
               <FormControl>
-                <input
-                  type="checkbox"
+                <Checkbox
                   id="currentlyWorking"
                   checked={field.value}
-                  onChange={field.onChange}
+                  onCheckedChange={field.onChange}
+                  className="border-neutral-400"
                 />
               </FormControl>
-              <FormLabel htmlFor="currentlyWorking" className="text-md">
-                I am currently working in this role
+              <FormLabel htmlFor="currentlyWorking">
+                Currently Working
               </FormLabel>
-              <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className="flex flex-col gap-4">
-          <label className="text-md">Start Date *</label>
-          <div className="flex gap-5">
-            <FormField
-              control={form.control}
-              name="startMonth"
-              render={({ field }) => (
-                <FormItem className="w-full">
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="startMonth"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Start Month</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <select
-                      {...field}
-                      className="border p-1 rounded w-full bg-slate-800 text-white"
-                    >
-                      <option value="">Month</option>
-                      {[
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December",
-                      ].map((month) => (
-                        <option key={month} value={month}>
-                          {month}
-                        </option>
-                      ))}
-                    </select>
+                    <SelectTrigger className="border-neutral-400">
+                      <SelectValue placeholder="Month" />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                  <SelectContent className="bg-black text-zinc-100">
+                    {months.map((month) => (
+                      <SelectItem
+                        key={month}
+                        value={month}
+                        className="hover:bg-neutral-700 cursor-pointer"
+                      >
+                        {month}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-            <FormField
-              control={form.control}
-              name="startYear"
-              render={({ field }) => (
-                <FormItem className="w-full">
+          <FormField
+            control={form.control}
+            name="startYear"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Start Year</FormLabel>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
-                    <select
-                      {...field}
-                      className="border p-1 rounded w-full bg-slate-800 text-white"
-                    >
-                      <option value="">Year</option>
-                      {Array.from(
-                        { length: 50 },
-                        (_, i) => new Date().getFullYear() - i
-                      ).map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
+                    <SelectTrigger className="border-neutral-400">
+                      <SelectValue placeholder="Year" />
+                    </SelectTrigger>
                   </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+                  <SelectContent className="bg-black text-zinc-100">
+                    {years.map((year) => (
+                      <SelectItem
+                        key={year}
+                        value={year.toString()}
+                        className="hover:bg-neutral-700 cursor-pointer"
+                      >
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-          <label className="text-md">End Date *</label>
-          <div className="flex gap-5">
+        {!isCurrentlyWorking && (
+          <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="endMonth"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <select
-                      {...field}
-                      className="border p-1 rounded w-full bg-slate-800 text-white disabled:bg-slate-600 disabled:text-slate-400"
-                      disabled={form.watch("isCurrentlyWorking")}
-                    >
-                      <option value="">Month</option>
-                      {[
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December",
-                      ].map((month) => (
-                        <option key={month} value={month}>
+                <FormItem>
+                  <FormLabel>End Month</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="border-neutral-400">
+                        <SelectValue placeholder="Month" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-black text-zinc-100">
+                      {months.map((month) => (
+                        <SelectItem
+                          key={month}
+                          value={month}
+                          className="hover:bg-neutral-700 cursor-pointer"
+                        >
                           {month}
-                        </option>
+                        </SelectItem>
                       ))}
-                    </select>
-                  </FormControl>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -273,30 +283,32 @@ export default function EditExperience({
               control={form.control}
               name="endYear"
               render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <select
-                      {...field}
-                      className="border p-1 rounded w-full bg-slate-800 text-white disabled:bg-slate-600 disabled:text-slate-400"
-                      disabled={form.watch("isCurrentlyWorking")}
-                    >
-                      <option value="">Year</option>
-                      {Array.from(
-                        { length: 50 },
-                        (_, i) => new Date().getFullYear() - i
-                      ).map((year) => (
-                        <option key={year} value={year}>
+                <FormItem>
+                  <FormLabel>End Year</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="border-neutral-400">
+                        <SelectValue placeholder="Year" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="bg-black text-zinc-100">
+                      {years.map((year) => (
+                        <SelectItem
+                          key={year}
+                          value={year.toString()}
+                          className="hover:bg-neutral-700 cursor-pointer"
+                        >
                           {year}
-                        </option>
+                        </SelectItem>
                       ))}
-                    </select>
-                  </FormControl>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-        </div>
+        )}
 
         <FormField
           control={form.control}
@@ -310,15 +322,14 @@ export default function EditExperience({
                   onClick={() => field.onChange([...(field.value || []), ""])}
                   className="text-white px-3 py-1 rounded"
                 >
-                  <Plus />
+                  <Plus className="cursor-pointer" />
                 </Button>
               </div>
 
               {(field.value || []).map((desc: string, index: number) => (
                 <div key={index} className="flex items-center gap-2 mt-2">
-                  <Textarea
+                  <Input
                     className="border rounded resize-none w-full pl-1"
-                    rows={2}
                     value={desc}
                     onChange={(e) => {
                       const updated = [...(field.value || [])];
@@ -335,7 +346,7 @@ export default function EditExperience({
                       field.onChange(updated);
                     }}
                   >
-                    <Trash2 />
+                    <Trash2 className="cursor-pointer" />
                   </Button>
                 </div>
               ))}
@@ -354,7 +365,7 @@ export default function EditExperience({
                 <Input
                   type="file"
                   onChange={(e) => field.onChange(e.target.files?.[0])}
-                  className="bg-slate-800 h-10 p-2 cursor-pointer rounded"
+                  className="h-10 p-2 cursor-pointer rounded"
                 />
               </FormControl>
               <FormMessage />

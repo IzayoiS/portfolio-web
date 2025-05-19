@@ -133,11 +133,11 @@ export default function ExperienceCMSPage() {
               </div>
             </div>
 
-            <h2 className="text-xl font-semibold mb-2">{exp.role}</h2>
-            <p className="text-green-500">{exp.company}</p>
+            <h2 className="text-xl font-semibold mb-1">{exp.role}</h2>
+            <p className="text-green-500 mb-3">{exp.company}</p>
             <p className="text-sm text-gray-400">
               {exp.start_month} {exp.start_year} -{" "}
-              {exp.currenly_working
+              {exp.currently_working
                 ? "Present"
                 : `${exp.end_month} ${exp.end_year}`}
             </p>

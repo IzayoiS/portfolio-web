@@ -18,7 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { useAddExperience } from "@/hooks/use-experience";
 import {
   formExpSchema,
@@ -80,9 +79,10 @@ export default function NewExperience({ onClose }: ExperienceClose) {
     if (data.endMonth) formData.append("endMonth", data.endMonth);
     if (data.endYear) formData.append("endYear", data.endYear);
     formData.append("isCurrentlyWorking", String(data.isCurrentlyWorking));
-    data.descriptions.forEach((desc, i) => {
-      formData.append(`descriptions[${i}]`, desc);
-    });
+    formData.append("descriptions", JSON.stringify(data.descriptions));
+    // data.descriptions.forEach((desc, i) => {
+    //   formData.append(`descriptions[${i}]`, desc);
+    // });
     if (data.logo) {
       formData.append("logo", data.logo);
     }
@@ -292,9 +292,8 @@ export default function NewExperience({ onClose }: ExperienceClose) {
 
               {(field.value || []).map((desc: string, index: number) => (
                 <div key={index} className="flex items-center gap-2 mt-2">
-                  <Textarea
+                  <Input
                     className="border rounded resize-none w-full pl-1"
-                    rows={2}
                     value={desc}
                     onChange={(e) => {
                       const updated = [...(field.value || [])];
@@ -312,7 +311,7 @@ export default function NewExperience({ onClose }: ExperienceClose) {
                     }}
                     className="cursor-pointer"
                   >
-                    <Trash2 />
+                    <Trash2 className="cursor-pointer" />
                   </Button>
                 </div>
               ))}
