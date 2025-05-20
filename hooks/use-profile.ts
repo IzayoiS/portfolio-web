@@ -7,6 +7,8 @@ export const useProfile = (id: number) => {
     queryKey: ["profile", id],
     queryFn: async () => {
       const res = await api.get(`/profile/${id}`);
+      console.log("res profile", res.data);
+
       return res.data;
     },
   });

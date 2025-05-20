@@ -19,12 +19,7 @@ export const useExperience = () => {
   return useQuery({
     queryKey: ["experiences"],
     queryFn: async () => {
-      const token = localStorage.getItem("token");
-      const res = await api.get("/experience", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await api.get("/experience");
       console.log("Hasil get exp", res.data);
 
       return res.data;

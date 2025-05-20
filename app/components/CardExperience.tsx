@@ -6,6 +6,7 @@ import { TailSpin } from "react-loader-spinner";
 
 export default function CardExperience() {
   const { data: experience, isLoading } = useExperience();
+  console.log("exper", experience);
 
   if (isLoading) {
     return (

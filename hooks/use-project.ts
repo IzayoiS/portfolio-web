@@ -16,12 +16,7 @@ export const useProject = () => {
   return useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
-      const token = localStorage.getItem("token");
-      const res = await api.get("/project", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await api.get("/project");
       return res.data;
     },
   });

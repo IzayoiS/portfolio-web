@@ -9,7 +9,6 @@ import "swiper/css/pagination";
 
 export default function TechStack() {
   const { data: tech, isLoading } = useTechStacks();
-  console.log("tech dari fe", tech);
 
   if (isLoading) {
     return (
