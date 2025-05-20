@@ -51,7 +51,7 @@ export default function CardExperience() {
                 {exp.tech_stack.split(",").map((tech, i) => (
                   <p
                     key={i}
-                    className="dark:bg-gray-600 dark:text-gray-400 bg-gray-200 p-1 text-center w-auto px-3 h-auto rounded-2xl text-gray-600 font-medium"
+                    className="dark:bg-gray-600 dark:text-gray-400 bg-gray-200 p-1 text-center w-auto px-3 h-auto rounded-2xl text-gray-600 font-semibold"
                   >
                     {tech}
                   </p>

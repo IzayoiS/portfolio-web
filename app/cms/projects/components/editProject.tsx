@@ -134,7 +134,7 @@ export default function EditProject({ project, onClose }: EditProjectProps) {
           name="linkGithub"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Link Github</FormLabel>
+              <FormLabel>Link Github (type # if not available)</FormLabel>
               <FormControl>
                 <Input {...field} className="border-neutral-400" />
               </FormControl>
@@ -148,7 +148,7 @@ export default function EditProject({ project, onClose }: EditProjectProps) {
           name="linkWebsite"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Website URL</FormLabel>
+              <FormLabel>Website URL (type # if not available)</FormLabel>
               <FormControl>
                 <Input {...field} className="border-neutral-400" />
               </FormControl>

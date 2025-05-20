@@ -119,7 +119,7 @@ export default function NewProject({ onClose }: ProjectClose) {
           name="linkGithub"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Link Github</FormLabel>
+              <FormLabel>Link Github (type # if not available)</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -137,7 +137,7 @@ export default function NewProject({ onClose }: ProjectClose) {
           name="linkWebsite"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Website URL</FormLabel>
+              <FormLabel>Website URL (type # if not available)</FormLabel>
               <FormControl>
                 <Input
                   {...field}
