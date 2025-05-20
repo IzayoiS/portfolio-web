@@ -66,6 +66,9 @@ export default function NavBar() {
         </div>
 
         {/* Hamburger (muncul di bawah lg) */}
+        <div className="ml-40 md:hidden">
+          <ModeToggle />
+        </div>
         <button
           className="md:hidden"
           onClick={() => setIsOpen(!isOpen)}
@@ -109,7 +112,7 @@ export default function NavBar() {
           </button>
           <ButtonWhatsapp variant="drawer" />
           <BtnDownloadCV variant="drawer" />
-          <ModeToggle />
+          {/* <ModeToggle /> */}
         </div>
       </div>
 
