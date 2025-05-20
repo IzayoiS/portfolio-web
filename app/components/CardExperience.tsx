@@ -1,12 +1,25 @@
+"use client";
+
+import { ExpType, useExperience } from "@/hooks/use-experience";
 import Image from "next/image";
-import { experiences } from "@/utils/data/experiences";
+import { TailSpin } from "react-loader-spinner";
 
 export default function CardExperience() {
+  const { data: experience, isLoading } = useExperience();
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <TailSpin height={50} width={50} color="#fff" />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
-      {experiences.map((exp, idx) => (
+      {experience.map((exp: ExpType) => (
         <div
-          key={idx}
+          key={exp.id}
           className="mb-3 w-full dark:bg-gray-700 rounded-xl p-5 justify-between flex "
         >
           <div className="flex flex-col md:flex-row gap-4 items-start">
@@ -14,27 +27,31 @@ export default function CardExperience() {
               src={exp.logo}
               alt={exp.company}
               width={75}
+              height={75}
               className="object-contain h-16 mt-5 mr-5 dark:bg-white p-2 rounded-xl "
             />
             <div>
               <h1 className="text-lg font-semibold">{exp.role}</h1>
               <p className="text-md font-light text-green-500">{exp.company}</p>
-              <p className="text-sm font-extralight mt-1 md:hidden">
-                {exp.period}
+              <p className="text-sm font-extralight dark:text-gray-400 md:hidden mt-1">
+                {exp.start_month} {exp.start_year} -{" "}
+                {exp.currently_working
+                  ? "Present"
+                  : `${exp.end_month} ${exp.end_year}`}
               </p>
 
-              <ul className="list-disc mt-4 ml-4">
-                {exp.description.map((desc, i) => (
+              <ul className="list-disc mt-3 ml-4 dark:text-gray-400">
+                {exp.descriptions.map((desc, i) => (
                   <li key={i} className="text-md font-light">
                     {desc}
                   </li>
                 ))}
               </ul>
-              <div className="flex flex-wrap gap-2 mt-3 font-normal text-xs">
-                {exp.stack.map((tech, i) => (
+              <div className="flex flex-wrap gap-2 mt-3 font-medium text-xs">
+                {exp.tech_stack.split(",").map((tech, i) => (
                   <p
                     key={i}
-                    className="dark:bg-gray-500 bg-gray-200 p-1 text-center w-auto px-3 h-auto rounded-2xl"
+                    className="dark:bg-gray-600 dark:text-gray-400 bg-gray-200 p-1 text-center w-auto px-3 h-auto rounded-2xl text-gray-600 font-medium"
                   >
                     {tech}
                   </p>
@@ -42,8 +59,13 @@ export default function CardExperience() {
               </div>
             </div>
           </div>
-          <div className="hidden md:flex text-sm font-extralight text-right whitespace-nowrap">
-            <p>{exp.period}</p>
+          <div className="hidden md:flex text-sm font-light text-right whitespace-nowrap dark:text-gray-400">
+            <p>
+              {exp.start_month} {exp.start_year} -{" "}
+              {exp.currently_working
+                ? "Present"
+                : `${exp.end_month} ${exp.end_year}`}
+            </p>
           </div>
         </div>
       ))}

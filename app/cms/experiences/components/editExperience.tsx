@@ -59,6 +59,7 @@ export default function EditExperience({
     defaultValues: {
       company: experience.company,
       role: experience.role,
+      techStack: experience.tech_stack,
       startMonth: experience.start_month,
       startYear: experience.start_year,
       endMonth: experience.currently_working ? "" : experience.end_month,
@@ -78,6 +79,7 @@ export default function EditExperience({
 
     formData.append("company", data.company);
     formData.append("role", data.role);
+    formData.append("tech_stack", data.techStack);
     formData.append("start_month", data.startMonth);
     formData.append("start_year", data.startYear);
     formData.append(
@@ -89,7 +91,6 @@ export default function EditExperience({
       data.isCurrentlyWorking ? "" : data.endYear || ""
     );
     formData.append("isCurrentlyWorking", String(data.isCurrentlyWorking));
-
     formData.append("descriptions", JSON.stringify(data.descriptions));
 
     if (data.logo) {
@@ -134,6 +135,7 @@ export default function EditExperience({
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="role"
@@ -151,12 +153,13 @@ export default function EditExperience({
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
-          name="company"
+          name="techStack"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Company *</FormLabel>
+              <FormLabel>Tech Stack (comma separated)</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -168,6 +171,7 @@ export default function EditExperience({
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="isCurrentlyWorking"

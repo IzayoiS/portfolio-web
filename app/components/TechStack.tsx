@@ -28,7 +28,7 @@ export default function TechStack() {
         {tech.map((tc: techType) => (
           <div
             key={tc.id}
-            className="w-28 h-30 flex flex-col items-center justify-between mx-4 mt-2"
+            className="w-28 h-28 flex flex-col items-center justify-between mx-4 mt-2"
           >
             <div className="bg-white dark:bg-gray-600 rounded-xl p-4 hover:scale-105 transition-transform">
               <Image

@@ -152,6 +152,22 @@ export default function ExperienceCMSPage() {
                 </li>
               )}
             </ul>
+            <div className="flex flex-wrap gap-2 py-3">
+              {exp.tech_stack ? (
+                exp.tech_stack.split(",").map((tech, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-slate-800 text-slate-200 text-xs px-3 py-1 rounded-full"
+                  >
+                    {tech.trim()}
+                  </span>
+                ))
+              ) : (
+                <span className="text-sm text-gray-500 italic mt-2">
+                  No Tech Stack
+                </span>
+              )}
+            </div>
           </div>
         ))}
       </div>

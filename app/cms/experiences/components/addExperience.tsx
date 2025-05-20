@@ -54,6 +54,7 @@ export default function NewExperience({ onClose }: ExperienceClose) {
     resolver: zodResolver(formExpSchema),
     defaultValues: {
       company: "",
+      techStack: "",
       role: "",
       startMonth: "",
       startYear: "",
@@ -73,6 +74,7 @@ export default function NewExperience({ onClose }: ExperienceClose) {
   const onSubmit = (data: FormExpSchemaDTO) => {
     const formData = new FormData();
     formData.append("company", data.company);
+    formData.append("tech_stack", data.techStack);
     formData.append("role", data.role);
     formData.append("startMonth", data.startMonth);
     formData.append("startYear", data.startYear);
@@ -80,9 +82,6 @@ export default function NewExperience({ onClose }: ExperienceClose) {
     if (data.endYear) formData.append("endYear", data.endYear);
     formData.append("isCurrentlyWorking", String(data.isCurrentlyWorking));
     formData.append("descriptions", JSON.stringify(data.descriptions));
-    // data.descriptions.forEach((desc, i) => {
-    //   formData.append(`descriptions[${i}]`, desc);
-    // });
     if (data.logo) {
       formData.append("logo", data.logo);
     }
@@ -122,6 +121,24 @@ export default function NewExperience({ onClose }: ExperienceClose) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Role</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  autoComplete="off"
+                  className="border-neutral-400"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="techStack"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Tech Stack (comma separated)</FormLabel>
               <FormControl>
                 <Input
                   {...field}

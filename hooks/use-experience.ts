@@ -5,6 +5,7 @@ export interface ExpType {
   id: number;
   company: string;
   role: string;
+  tech_stack: string;
   start_month: string;
   start_year: string;
   end_month: string;

@@ -27,19 +27,16 @@ export default function CardProject() {
             />
           </div>
           <div className="p-7 rounded-b-xl dark:bg-gray-700">
-            <h1 className="text-xl font-bold pb-2 dark:text-white">
-              {pr.projectName}
-            </h1>
-            <p className="text-md font-light dark:text-white ">
+            <h1 className="text-xl font-semibold pb-2">{pr.projectName}</h1>
+            <p className="text-md font-light text-gray-600 dark:text-gray-400">
               {truncateText(pr.descriptions, 12)}
-              {/* {pr.descriptions} */}
             </p>
 
             <div className="flex flex-wrap gap-3 pt-5 pb-5 font-normal text-xs">
               {pr.techStack.map((tech, i) => (
                 <p
                   key={i}
-                  className="dark:bg-gray-500 bg-gray-200 p-1 text-center w-auto px-3 h-auto rounded-2xl"
+                  className="dark:bg-gray-600 bg-gray-200 p-1 text-center w-auto px-3 h-auto rounded-2xl text-gray-600 dark:text-gray-400"
                 >
                   {tech}
                 </p>
