@@ -1,15 +1,15 @@
 "use client";
 
-import Image from "next/image";
-import ProfileImage from "@/public/assets/images/iqbal.jpg";
-import { useProfile } from "@/hooks/use-profile";
-import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import api from "@/utils/api";
-import { useAuth } from "@/store/user";
-import { TailSpin } from "react-loader-spinner";
-import { ChangeEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useProfile } from "@/hooks/use-profile";
+import ProfileImage from "@/public/assets/images/iqbal.jpg";
+import { useAuth } from "@/store/user";
+import api from "@/utils/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Image from "next/image";
+import { ChangeEvent, useState } from "react";
+import { TailSpin } from "react-loader-spinner";
+import { toast } from "sonner";
 
 export default function EditProfile() {
   const { data: profile, isLoading } = useProfile(1);
@@ -138,7 +138,30 @@ export default function EditProfile() {
             type="text"
             name="location"
             className="w-full border p-2 rounded"
+            autoComplete="off"
             defaultValue={profile?.location || ""}
+          />
+        </div>
+
+        <div>
+          <label className="text-md">Email</label>
+          <input
+            type="email"
+            name="email"
+            className="w-full border p-2 rounded"
+            autoComplete="off"
+            defaultValue={profile?.email || ""}
+          />
+        </div>
+
+        <div>
+          <label className="text-md">Phone Number</label>
+          <input
+            type="text"
+            name="phone"
+            className="w-full border p-2 rounded"
+            autoComplete="off"
+            defaultValue={profile?.phone || ""}
           />
         </div>
 

@@ -1,9 +1,23 @@
+"use client";
+
+import { useProfile } from "@/hooks/use-profile";
 import MailLogo from "@/public/assets/images/mail-white.svg";
 import MailLogoBlack from "@/public/assets/images/mail.svg";
 import WhatsappLogo from "@/public/assets/images/whatsapp.png";
 import Image from "next/image";
+import { TailSpin } from "react-loader-spinner";
 
 export default function CallToAction() {
+  const { data: profile, isLoading } = useProfile(1);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[calc(100vh-200px)]">
+        <TailSpin visible={true} height={50} width={50} color="#fff" />
+      </div>
+    );
+  }
+
   return (
     <section className="text-center py-20">
       <h2 className="text-3xl font-extrabold mb-4">
@@ -31,7 +45,7 @@ export default function CallToAction() {
               className="hidden dark:block dark:w-6"
             />
             <p className="text-sm md:mr-6 text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
-              iqbalmhasby54@gmail.com
+              {profile?.email}
             </p>
           </a>
         </div>
@@ -42,7 +56,9 @@ export default function CallToAction() {
             className="flex flex-row gap-3"
           >
             <Image src={WhatsappLogo} alt="Whatsapp" width={20} />
-            <p className="text-sm">+62 821-2298-9338</p>
+            <p className="text-sm">
+              {profile?.phone.match(/.{1,4}/g)?.join("-")}
+            </p>
           </a>
         </div>
       </div>
