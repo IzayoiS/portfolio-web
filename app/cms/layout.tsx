@@ -9,7 +9,7 @@ export default function CMSLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="w-screen bg-black text-zinc-100">
+      <main className="w-screen bg-[#171923] text-zinc-100">
         <SiteHeader />
         <ProtectedRoute>
           <QueryProvider>{children}</QueryProvider>

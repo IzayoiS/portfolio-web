@@ -37,7 +37,7 @@ export default function NavUser({
   }
 
   return (
-    <SidebarMenu className="bg-black pb-3">
+    <SidebarMenu className="bg-[#171923] pb-3">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <SidebarMenuButton

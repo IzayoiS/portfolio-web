@@ -83,7 +83,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="bg-black text-zinc-100">
+      <SidebarHeader className="bg-[#171923] text-zinc-100">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -98,7 +98,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="bg-black text-zinc-100">
+      <SidebarContent className="bg-[#171923] text-zinc-100">
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
           <SidebarMenu>
             {items.map((item) => (
