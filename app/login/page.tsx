@@ -13,10 +13,13 @@ import { toast } from "sonner";
 import GuestRoute from "../components/GuestRoute";
 import { useAuth } from "@/store/user";
 import Cookies from "js-cookie";
+import { TailSpin } from "react-loader-spinner";
+import { useState } from "react";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -28,6 +31,7 @@ export default function LoginPage() {
   });
 
   async function onSubmit(data: LoginSchemaDTO) {
+    setIsSubmitting(true);
     try {
       const response = await api.post("/login", {
         email: data.email,
@@ -104,8 +108,13 @@ export default function LoginPage() {
             <Button
               type="submit"
               className="bg-blue-500 text-white py-3 rounded hover:bg-blue-600 cursor-pointer transition"
+              disabled={isSubmitting}
             >
-              Login
+              {isSubmitting ? (
+                <TailSpin height={40} width={50} color="#000" />
+              ) : (
+                "Login"
+              )}
             </Button>
           </form>
         </div>
