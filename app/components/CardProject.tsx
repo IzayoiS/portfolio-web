@@ -31,7 +31,7 @@ export default function CardProject() {
           key={pr.id}
           className=" bg-white rounded-2xl mt-8 min-h-[400px] shadow-xs flex flex-col"
         >
-          <div className="flex justify-center bg-gray-100 dark:bg-[#dee2e6] rounded-t-2xl h-55 items-center">
+          <div className="flex justify-center bg-gray-100 dark:bg-[#dee2e6] rounded-t-2xl h-55 items-center overflow-hidden">
             <Image
               src={pr.logo}
               alt="Project"
