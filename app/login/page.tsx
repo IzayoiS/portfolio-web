@@ -63,6 +63,8 @@ export default function LoginPage() {
       }
 
       toast("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
