@@ -6,20 +6,14 @@ import CircleLocation from "@/public/assets/images/button.png";
 import ProfileImage from "@/public/assets/images/iqbal.jpg";
 import PinLocation from "@/public/assets/images/pin.png";
 import Image from "next/image";
-import { TailSpin } from "react-loader-spinner";
 import ButtonDownloadCV from "./ButtonDownloadCV";
 import ButtonWhatsapp from "./ButtonWhatsapp";
+import { Hero } from "./skeleton/Hero";
 
 export default function Intro() {
   const { data: profile, isLoading } = useProfile(1);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-[calc(100vh-200px)]">
-        <TailSpin visible={true} height={50} width={50} color="#fff" />
-      </div>
-    );
-  }
+  if (isLoading) return <Hero />;
 
   return (
     <section className="flex flex-col lg:flex-row items-center lg:items-start justify-center lg:justify-start gap-10 pt-26 px-6">
@@ -30,7 +24,7 @@ export default function Intro() {
             alt="Iqbal Muhammad Hasbi"
             width={350}
             height={350}
-            className="object-cover "
+            className="object-cover"
           />
         </div>
       </div>

@@ -1,14 +1,12 @@
 import api from "@/utils/api";
-import { useQuery } from "@tanstack/react-query";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useProfile = (id: number) => {
   return useQuery({
     queryKey: ["profile", id],
     queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const res = await api.get(`/profile/${id}`);
-      console.log("res profile", res.data);
-
       return res.data;
     },
   });

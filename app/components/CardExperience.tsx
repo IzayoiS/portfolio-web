@@ -2,19 +2,12 @@
 
 import { ExpType, useExperience } from "@/hooks/use-experience";
 import Image from "next/image";
-import { TailSpin } from "react-loader-spinner";
+import { Experience } from "./skeleton/Experience";
 
 export default function CardExperience() {
   const { data: experience, isLoading } = useExperience();
-  console.log("exper", experience);
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <TailSpin height={50} width={50} color="#fff" />
-      </div>
-    );
-  }
+  if (isLoading) return <Experience />;
 
   return (
     <div className="flex flex-col gap-6">

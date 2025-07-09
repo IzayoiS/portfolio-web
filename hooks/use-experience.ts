@@ -19,9 +19,8 @@ export const useExperience = () => {
   return useQuery({
     queryKey: ["experiences"],
     queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const res = await api.get("/experience");
-      console.log("Hasil get exp", res.data);
-
       return res.data;
     },
   });

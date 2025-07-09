@@ -5,18 +5,12 @@ import GithubLogo from "@/public/assets/images/github.png";
 import LinkLogoBlack from "@/public/assets/images/link-black.svg";
 import LinkLogo from "@/public/assets/images/link.svg";
 import Image from "next/image";
-import { TailSpin } from "react-loader-spinner";
+import { Project } from "./skeleton/Project";
 
 export default function CardProject() {
   const { data: project, isLoading } = useProject();
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <TailSpin height={50} width={50} color="#fff" />
-      </div>
-    );
-  }
+  if (isLoading) return <Project />;
 
   function truncateText(text: string, wordLimit: number) {
     const words = text.split(" ");

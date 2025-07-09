@@ -16,6 +16,7 @@ export const useProject = () => {
   return useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const res = await api.get("/project");
       return res.data;
     },

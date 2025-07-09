@@ -13,6 +13,7 @@ export const useTechStacks = () => {
   return useQuery({
     queryKey: ["tech-stacks"],
     queryFn: async () => {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const res = await api.get("/tech");
       return res.data;
     },
